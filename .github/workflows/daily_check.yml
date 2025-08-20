@@ -1,118 +1,111 @@
-# .github/workflows/daily_check.yml
-name: 📊 Daily Algorithm Study Check
+# .github/workflows/debug_check.yml
+name: 🔍 Debug Check
 
 on:
-  # 자동 스케줄 임시 비활성화 (충돌 해결을 위해)
-  # schedule:
-  #   - cron: '0 12 * * *'  # 임시 비활성화
-  workflow_dispatch:  # 수동 실행만 가능
+  workflow_dispatch:  # 수동 실행만
     
 jobs:
-  check-daily-progress:
+  debug-environment:
     runs-on: ubuntu-latest
     
     steps:
-    - name: 📥 레포지토리 체크아웃
+    - name: 📥 체크아웃
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
-      
-    - name: 🐍 Python 설정
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
         
-    - name: 🔧 Git 설정
+    - name: 🔍 환경 정보 확인
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        
-    - name: 🔄 안전한 동기화
-      run: |
-        echo "📡 원격 저장소와 동기화 중..."
-        
-        # 원격 최신 정보 가져오기
-        git fetch origin master
-        
-        # 현재 상태 확인
-        echo "🔍 현재 Git 상태:"
-        git status
-        
-        # 원격과 차이가 있는지 확인
-        LOCAL=$(git rev-parse HEAD)
-        REMOTE=$(git rev-parse origin/master)
-        
-        if [ "$LOCAL" != "$REMOTE" ]; then
-          echo "⚠️  원격과 차이 발견, 동기화 필요"
-          git reset --hard origin/master
-          echo "✅ 원격과 동기화 완료"
-        else
-          echo "✅ 이미 최신 상태"
-        fi
-        
-    - name: 📊 일일 진행상황 체크
-      run: |
-        echo "🚀 일일 알고리즘 스터디 체크 시작!"
-        python scripts/daily_check.py || echo "⚠️  일일 체크 실행 중 오류 발생"
-        
-    - name: 📈 진행률 업데이트
-      run: |
-        echo "📈 진행률 업데이트 시작!"
-        python scripts/update_progress.py || echo "⚠️  진행률 업데이트 스크립트 실행 중 오류 발생"
-        
-    - name: 💾 안전한 커밋 및 푸시
-      run: |
-        echo "💾 변경사항 확인 및 커밋..."
-        
-        # 변경사항 확인
-        if [[ -n $(git status --porcelain) ]]; then
-          echo "📝 변경사항 발견:"
-          git status --short
-          
-          # 변경사항 스테이징
-          git add .
-          
-          # 커밋
-          commit_message="📊 자동 업데이트: $(date +'%Y-%m-%d %H:%M') 진행상황"
-          git commit -m "$commit_message"
-          
-          # 푸시 전 한 번 더 동기화 확인
-          echo "🔄 푸시 전 최종 동기화 확인"
-          git fetch origin master
-          
-          LOCAL=$(git rev-parse HEAD^)  # 커밋 전 상태
-          REMOTE=$(git rev-parse origin/master)
-          
-          if [ "$LOCAL" = "$REMOTE" ]; then
-            echo "✅ 안전하게 푸시 가능"
-            git push origin master
-            echo "✅ 푸시 성공!"
+        echo "🔍 GitHub Actions 환경 디버깅"
+        echo "================================"
+        echo "📂 현재 작업 디렉토리: $(pwd)"
+        echo "📂 디렉토리 내용:"
+        ls -la
+        echo ""
+        echo "📁 전체 파일 구조 (깊이 3):"
+        find . -maxdepth 3 -type f | sort
+        echo ""
+        echo "📄 README.md 파일들 찾기:"
+        find . -name "README.md" -type f
+        echo ""
+        echo "📁 8월3주차 폴더 확인:"
+        if [ -d "8월3주차" ]; then
+          echo "✅ 8월3주차 폴더 존재"
+          ls -la "8월3주차/"
+          echo ""
+          echo "📄 8월3주차/README.md 확인:"
+          if [ -f "8월3주차/README.md" ]; then
+            echo "✅ 8월3주차/README.md 존재"
+            echo "파일 크기: $(stat -c%s "8월3주차/README.md") bytes"
+            echo "첫 5줄:"
+            head -5 "8월3주차/README.md"
           else
-            echo "⚠️  원격에 새로운 변경사항이 있음, 병합 후 푸시"
-            
-            # 현재 커밋을 임시 저장
-            CURRENT_COMMIT=$(git rev-parse HEAD)
-            
-            # 원격과 병합
-            git reset --hard origin/master
-            git cherry-pick $CURRENT_COMMIT
-            
-            # 다시 푸시 시도
-            git push origin master
-            echo "✅ 병합 후 푸시 성공!"
+            echo "❌ 8월3주차/README.md 없음"
           fi
-          
         else
-          echo "ℹ️  업데이트할 변경사항이 없습니다."
+          echo "❌ 8월3주차 폴더 없음"
+        fi
+        echo ""
+        echo "🔍 한글 폴더명 문제 확인:"
+        ls -la | grep -E "(월|주차)" || echo "한글 폴더 없음"
+        
+    - name: 🧪 파일 생성 테스트
+      run: |
+        echo "🧪 파일 생성 테스트"
+        echo "=================="
+        
+        # 8월3주차 폴더가 없으면 생성
+        if [ ! -d "8월3주차" ]; then
+          echo "📁 8월3주차 폴더 생성"
+          mkdir -p "8월3주차"
         fi
         
-    - name: 📋 실행 결과 요약
-      if: always()
+        # README.md가 없으면 생성
+        if [ ! -f "8월3주차/README.md" ]; then
+          echo "📄 README.md 생성"
+          cat > "8월3주차/README.md" << 'EOF'
+# 8월3주차 - GitHub Actions 테스트
+
+이 파일은 GitHub Actions에서 생성되었습니다.
+
+## 테스트 정보
+- 생성 시간: $(date)
+- 환경: GitHub Actions Ubuntu
+
+## 기본 구조
+- 파일 생성 테스트 완료
+EOF
+        else
+          echo "✅ README.md 이미 존재"
+        fi
+        
+        echo "✅ 테스트 완료"
+        
+    - name: 🔍 생성 후 확인
       run: |
-        echo "📋 실행 결과 요약:"
-        today=$(date +'%Y%m%d')
-        echo "- 일일 체크: $([ -f "logs/daily_log_${today}.json" ] && echo '✅ 완료' || echo '❌ 실패')"
-        echo "- 진행률 업데이트: $([ -f "logs/progress_log_${today}.json" ] && echo '✅ 완료' || echo '❌ 실패')"
-        echo "- 최근 커밋: $(git log --oneline -1)"
-        echo "✅ 워크플로우 실행 완료"
+        echo "🔍 생성 후 상태 확인"
+        echo "=================="
+        echo "📁 8월3주차 내용:"
+        ls -la "8월3주차/" || echo "폴더 없음"
+        echo ""
+        echo "📄 README.md 내용 확인:"
+        if [ -f "8월3주차/README.md" ]; then
+          echo "✅ 파일 존재"
+          echo "내용:"
+          cat "8월3주차/README.md"
+        else
+          echo "❌ 파일 없음"
+        fi
+        
+    - name: 🔍 Git 상태 확인
+      run: |
+        echo "🔍 Git 상태 확인"
+        echo "==============="
+        git status
+        echo ""
+        echo "📊 최근 커밋:"
+        git log --oneline -3
+        echo ""
+        echo "🔄 원격과 비교:"
+        git fetch origin
+        git status
