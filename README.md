@@ -120,9 +120,85 @@ git push origin feature/본인이름
 # master에 머지 (온라인에서 Pull Request 생성)
 ```
 
-#### Option 2: Master 브랜치 직접 사용 (초보자용)
-- 모든 작업을 master에서 진행
-- **반드시** 매번 `git pull` 먼저 실행
+---
+# 🔥Git branch 관련 무조건 지켜야 하는 사항!!!!
+
+## 📝 1단계: 일상적인 문제 풀이 워크플로우
+
+### 2-1. 작업 시작 전 (매일 습관화!)
+```bash
+# 1) 개인 브랜치에 있는지 확인
+git branch
+# * feature/김강연  ← 확인!
+
+# 2) master의 최신 변경사항 가져오기
+git checkout master
+git pull origin master
+
+# 3) 개인 브랜치로 돌아가서 master 변경사항 병합
+git checkout feature/본인이름
+git merge master
+# 또는 git rebase master (더 깔끔한 히스토리)
+```
+
+### 2-2. 문제 풀이 및 커밋
+```bash
+# 문제 폴더 생성 및 파일 작성
+cd 8월3주차/0820
+mkdir BOJ_10870  # 아직 없다면
+cd BOJ_10870
+
+# 본인 파일 작성
+# BOJ_10870_김강연.py 파일 생성하고 문제 풀이
+
+# 커밋
+git add .
+git commit -m "solve: BOJ_10870_김강연 - 피보나치 수 5"
+```
+
+### 2-3. 개인 브랜치에 푸시
+```bash
+# 개인 브랜치에 푸시 (충돌 위험 0%)
+git push origin feature/본인이름
+```
+
+### 2-4. Pull Request 생성
+1. GitHub 웹사이트 접속
+2. "Compare & pull request" 버튼 클릭
+3. 제목: `solve: BOJ_10870_김강연 - 피보나치 수 5`
+4. "Create pull request" 클릭
+
+### 2-5. 자동 병합 또는 관리자 병합
+- 충돌이 없으면 → "Merge pull request" 클릭
+- 병합 완료!
+
+---
+
+## 🛡️ 3단계: 충돌 방지 규칙
+
+### ✅ 절대 안전한 작업들
+```bash
+# 1. 본인 파일만 생성/수정
+8월3주차/0820/BOJ_10870/BOJ_10870_김강연.py  ← 안전!
+
+# 2. 개인 브랜치에서만 작업
+git checkout feature/김강연  ← 안전!
+
+# 3. 개인 브랜치에만 푸시
+git push origin feature/김강연  ← 안전!
+```
+
+### ❌ 절대 하면 안 되는 것들
+```bash
+# 1. 다른 사람 파일 수정 금지
+BOJ_10870_신재혁.py  ← 절대 건드리지 말기!
+
+# 2. master 브랜치에 직접 푸시 금지
+git push origin master  ← 금지!
+
+# 3. 다른 사람 브랜치에 푸시 금지
+git push origin feature/신재혁  ← 금지!
+```
 
 ---
 
