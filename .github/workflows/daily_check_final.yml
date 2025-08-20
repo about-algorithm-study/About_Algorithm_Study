@@ -1,8 +1,10 @@
 # .github/workflows/daily_check_final.yml
-name: 📊 Daily Check (WORKING)
+name: 📊 Daily Check (NEW STRUCTURE)
 
 on:
   workflow_dispatch:  # 수동 실행으로 테스트
+  schedule:
+    - cron: '0 15 * * *'  # 매일 한국시간 오후 12시 (UTC 15시)
     
 jobs:
   check-daily-progress:
@@ -24,42 +26,71 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-    - name: 🔍 환경 확인
+    - name: 🔍 환경 및 구조 확인
       run: |
         echo "📂 현재 디렉토리: $(pwd)"
-        echo "📁 파일 목록:"
+        echo "📁 루트 파일 목록:"
         ls -la
+        echo ""
         echo "📄 README 파일들:"
         find . -name "README.md"
-        echo "📁 8월3주차 내용:"
-        ls -la "8월3주차/"
+        echo ""
+        echo "📁 주차 폴더 구조:"
+        ls -la "8월3주차/" || echo "8월3주차 폴더 없음"
+        echo ""
+        echo "📅 날짜 폴더 구조:"
+        ls -la "8월3주차/0820/" || echo "0820 폴더 없음"
+        echo ""
+        echo "🗂️ 문제 폴더들 (새 구조):"
+        find "8월3주차/0820/" -type d -name "BOJ_*" 2>/dev/null || echo "문제 폴더 없음"
+        echo ""
+        echo "📝 Python 파일들:"
+        find "8월3주차/0820/" -name "*.py" 2>/dev/null || echo "Python 파일 없음"
         
-    - name: 📊 일일 진행상황 체크
+    - name: 📊 일일 진행상황 체크 (새 구조)
       run: |
-        echo "🚀 일일 알고리즘 스터디 체크 시작!"
+        echo "🚀 일일 알고리즘 스터디 체크 시작! (문제별 폴더 구조)"
         python scripts/daily_check.py
         
-    - name: 📈 진행률 업데이트 (수정된 버전)
+    - name: 📈 진행률 업데이트 (새 구조)
       run: |
-        echo "📈 진행률 업데이트 시작!"
+        echo "📈 진행률 업데이트 시작! (문제별 폴더 구조)"
         python scripts/update_progress.py
         
-    - name: 🔍 실행 후 확인
+    - name: 🔍 실행 후 상세 확인
       run: |
         echo "🔍 실행 후 상태 확인"
         git status
         echo ""
         echo "📊 생성된 로그:"
-        ls -la logs/
+        ls -la logs/ || echo "로그 폴더 없음"
+        echo ""
+        echo "📋 로그 내용 미리보기:"
+        if [ -f logs/daily_log_$(date +%Y%m%d).json ]; then
+          echo "=== 오늘의 일일 로그 ==="
+          cat logs/daily_log_$(date +%Y%m%d).json
+        fi
+        echo ""
+        if [ -f logs/progress_log_$(date +%Y%m%d).json ]; then
+          echo "=== 오늘의 진행률 로그 ==="
+          cat logs/progress_log_$(date +%Y%m%d).json
+        fi
         
     - name: 💾 커밋 및 푸시
       run: |
         if [[ -n $(git status --porcelain) ]]; then
-          echo "📝 변경사항 발견"
+          echo "📝 변경사항 발견 - 자동 커밋 진행"
           git add .
-          git commit -m "📊 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 경로 수정 버전"
+          git commit -m "📊 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 새로운 문제별 폴더 구조"
           git push origin master
           echo "✅ 푸시 완료!"
         else
-          echo "ℹ️  변경사항 없음"
+          echo "ℹ️  변경사항 없음 - 커밋할 내용이 없습니다"
         fi
+
+    - name: 📊 결과 요약
+      run: |
+        echo "🎯 GitHub Actions 실행 완료!"
+        echo "📈 스터디 멤버: 김강연, 신재혁, 오창민, 송민경, 최재각"
+        echo "📁 파일 구조: 8월3주차/0820/BOJ_문제번호/BOJ_문제번호_이름.py"
+        echo "🤖 자동화: 일일 체크 + 진행률 업데이트"

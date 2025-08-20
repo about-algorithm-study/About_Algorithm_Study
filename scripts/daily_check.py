@@ -1,10 +1,10 @@
-# scripts/daily_check.py
+# scripts/daily_check.py - 문제별 폴더 구조 대응 버전
 import os
 import json
 from datetime import datetime, date
 import glob
 
-# 스터디 멤버 리스트 (실제 이름으로 수정하세요!)
+# 스터디 멤버 리스트 (실제 이름으로 업데이트)
 MEMBERS = [
     "김강연",
     "신재혁", 
@@ -14,7 +14,7 @@ MEMBERS = [
 ]
 
 def get_current_week_folder():
-    """현재 주차 폴더명 반환 - 개선된 버전"""
+    """현재 주차 폴더명 반환"""
     today = date.today()
     month = today.month
     
@@ -41,7 +41,7 @@ def find_week_folders():
     return sorted(week_folders)
 
 def check_today_uploads():
-    """오늘 업로드된 파일들 체크 - 개선된 버전"""
+    """오늘 업로드된 파일들 체크 - 문제별 폴더 구조 대응"""
     week_folder = get_current_week_folder()
     today_folder = get_today_folder()
     
@@ -70,20 +70,37 @@ def check_today_uploads():
     
     if not folder_path:
         print(f"❌ 오늘 폴더를 찾을 수 없습니다.")
-        # 빈 결과 반환
         return {member: {'uploaded_count': 0, 'files': [], 'status': '❌'} for member in MEMBERS}
     
-    # 각 멤버별 업로드 현황 체크
+    # 각 멤버별 업로드 현황 체크 (문제별 폴더 구조 고려)
     upload_status = {}
     
     for member in MEMBERS:
         member_files = []
         
         try:
-            # 해당 폴더에서 멤버 이름이 포함된 파일 찾기
-            for file in os.listdir(folder_path):
-                if member in file and file.endswith('.py'):
-                    member_files.append(file)
+            # 날짜 폴더 안의 모든 문제 폴더 확인
+            if os.path.exists(folder_path):
+                items = os.listdir(folder_path)
+                
+                # 문제 폴더들 찾기 (BOJ_, PRO_ 등으로 시작하는 폴더)
+                problem_folders = [item for item in items if os.path.isdir(os.path.join(folder_path, item)) and ('BOJ_' in item or 'PRO_' in item)]
+                
+                print(f"📁 {member}의 문제 폴더들: {problem_folders}")
+                
+                # 각 문제 폴더에서 해당 멤버의 파일 찾기
+                for problem_folder in problem_folders:
+                    problem_path = os.path.join(folder_path, problem_folder)
+                    
+                    if os.path.isdir(problem_path):
+                        # 문제 폴더 안의 파일들 확인
+                        problem_files = os.listdir(problem_path)
+                        
+                        # 해당 멤버의 파일 찾기
+                        for file in problem_files:
+                            if member in file and file.endswith('.py'):
+                                member_files.append(f"{problem_folder}/{file}")
+                                
         except Exception as e:
             print(f"⚠️  {folder_path} 읽기 오류: {e}")
         
@@ -143,7 +160,8 @@ def save_daily_log(upload_status):
         'upload_status': upload_status,
         'timestamp': datetime.now().isoformat(),
         'week_folder': get_current_week_folder(),
-        'checked_paths': find_week_folders()
+        'checked_paths': find_week_folders(),
+        'file_structure_type': 'problem_folder_based'  # 새로운 구조 표시
     }
     
     log_file = f"{log_dir}/daily_log_{today}.json"
@@ -157,7 +175,7 @@ def save_daily_log(upload_status):
         print(f"❌ 로그 저장 실패: {e}")
 
 if __name__ == "__main__":
-    print("🚀 일일 알고리즘 스터디 체크 시작!")
+    print("🚀 일일 알고리즘 스터디 체크 시작! (문제별 폴더 구조)")
     
     try:
         upload_status = check_today_uploads()
