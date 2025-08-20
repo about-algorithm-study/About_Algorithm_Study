@@ -124,6 +124,7 @@ git push origin feature/본인이름
 # 🔥Git branch 관련 무조건 지켜야 하는 사항!!!!
 
 ## 📝 1단계: 일상적인 문제 풀이 워크플로우
+- 오류 발생 시 [충돌 방지 가이드](docs/confliction_solution.md) 참고
 
 ### 2-1. 작업 시작 전 (매일 습관화!)
 ```bash
