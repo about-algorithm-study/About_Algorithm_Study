@@ -14,39 +14,64 @@ MEMBERS = [
 ]
 
 def get_current_week_folder():
-    """현재 주차 폴더명 반환"""
-    # 8월 3주차, 8월 4주차 등의 형태로 가정
+    """현재 주차 폴더명 반환 - 개선된 버전"""
     today = date.today()
     month = today.month
     
-    # 간단한 주차 계산 (실제 상황에 맞게 수정 필요)
-    if today.day <= 7:
-        week = 1
-    elif today.day <= 14:
-        week = 2
-    elif today.day <= 21:
-        week = 3
-    else:
-        week = 4
+    # 실제 달력 기준으로 주차 계산
+    first_day = date(today.year, month, 1)
+    week_number = ((today.day - 1) // 7) + 1
     
-    return f"{month}월{week}주차"
+    return f"{month}월{week_number}주차"
 
 def get_today_folder():
     """오늘 날짜 폴더명 반환 (MMDD 형식)"""
     return datetime.now().strftime("%m%d")
 
+def find_week_folders():
+    """현재 월의 모든 주차 폴더 찾기"""
+    current_month = date.today().month
+    week_folders = []
+    
+    # 현재 디렉토리에서 월 주차 폴더 찾기
+    for item in os.listdir('.'):
+        if os.path.isdir(item) and f"{current_month}월" in item and "주차" in item:
+            week_folders.append(item)
+    
+    return sorted(week_folders)
+
 def check_today_uploads():
-    """오늘 업로드된 파일들 체크"""
+    """오늘 업로드된 파일들 체크 - 개선된 버전"""
     week_folder = get_current_week_folder()
     today_folder = get_today_folder()
     
-    folder_path = f"{week_folder}/{today_folder}"
+    # 여러 가능한 경로 확인
+    possible_paths = [
+        f"{week_folder}/{today_folder}",
+        f"{week_folder}/0820",  # 고정된 날짜 (임시)
+    ]
     
-    print(f"🔍 체크 경로: {folder_path}")
+    # 기존 주차 폴더들도 확인
+    week_folders = find_week_folders()
+    for wf in week_folders:
+        possible_paths.extend([
+            f"{wf}/{today_folder}",
+            f"{wf}/0820"
+        ])
     
-    if not os.path.exists(folder_path):
-        print(f"❌ 오늘 폴더가 존재하지 않습니다: {folder_path}")
-        return {}
+    folder_path = None
+    for path in possible_paths:
+        if os.path.exists(path):
+            folder_path = path
+            break
+    
+    print(f"🔍 체크 경로: {possible_paths}")
+    print(f"✅ 사용할 경로: {folder_path}")
+    
+    if not folder_path:
+        print(f"❌ 오늘 폴더를 찾을 수 없습니다.")
+        # 빈 결과 반환
+        return {member: {'uploaded_count': 0, 'files': [], 'status': '❌'} for member in MEMBERS}
     
     # 각 멤버별 업로드 현황 체크
     upload_status = {}
@@ -54,10 +79,13 @@ def check_today_uploads():
     for member in MEMBERS:
         member_files = []
         
-        # 해당 폴더에서 멤버 이름이 포함된 파일 찾기
-        for file in os.listdir(folder_path):
-            if member in file and file.endswith('.py'):
-                member_files.append(file)
+        try:
+            # 해당 폴더에서 멤버 이름이 포함된 파일 찾기
+            for file in os.listdir(folder_path):
+                if member in file and file.endswith('.py'):
+                    member_files.append(file)
+        except Exception as e:
+            print(f"⚠️  {folder_path} 읽기 오류: {e}")
         
         upload_status[member] = {
             'uploaded_count': len(member_files),
@@ -105,21 +133,28 @@ def save_daily_log(upload_status):
     today = datetime.now().strftime("%Y%m%d")
     log_dir = "logs"
     
+    # logs 디렉토리 생성
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
+        print(f"📁 {log_dir} 디렉토리 생성")
     
     log_data = {
         'date': today,
         'upload_status': upload_status,
-        'timestamp': datetime.now().isoformat()
+        'timestamp': datetime.now().isoformat(),
+        'week_folder': get_current_week_folder(),
+        'checked_paths': find_week_folders()
     }
     
     log_file = f"{log_dir}/daily_log_{today}.json"
     
-    with open(log_file, 'w', encoding='utf-8') as f:
-        json.dump(log_data, f, ensure_ascii=False, indent=2)
-    
-    print(f"💾 일일 로그 저장: {log_file}")
+    try:
+        with open(log_file, 'w', encoding='utf-8') as f:
+            json.dump(log_data, f, ensure_ascii=False, indent=2)
+        
+        print(f"💾 일일 로그 저장: {log_file}")
+    except Exception as e:
+        print(f"❌ 로그 저장 실패: {e}")
 
 if __name__ == "__main__":
     print("🚀 일일 알고리즘 스터디 체크 시작!")
