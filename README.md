@@ -122,6 +122,7 @@ git push origin feature/본인이름
 
 ---
 # 🔥Git branch 관련 무조건 지켜야 하는 사항!!!!
+- 문제 풀이 전 무조건 [브랜치 관리 가이드](docs/git_branch_file.md) 참고하기!!
 
 ## 📝 1단계: 일상적인 문제 풀이 워크플로우
 - 오류 발생 시 [충돌 방지 가이드](docs/confliction_solution.md) 참고
