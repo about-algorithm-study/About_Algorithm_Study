@@ -8,10 +8,10 @@ from collections import defaultdict
 # 스터디 멤버 리스트
 MEMBERS = [
     "김강연",
-    "홍길동", 
-    "김철수",
-    "이영희",
-    "박민수"
+    "신재혁", 
+    "오창민",
+    "송민경",
+    "최재각" 
 ]
 
 def find_all_week_folders():

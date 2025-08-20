@@ -7,11 +7,11 @@
 
 | 이름 | GitHub | 주 언어 |
 |------ |-------------|---------|
-| 홍길동 | [@honggildong](https://github.com/honggildong) | Python |
-| 김철수 | [@kimcheolsu](https://github.com/kimcheolsu) | Python |
-| 이영희 | [@leeyounghee](https://github.com/leeyounghee) | Python |
-| 박민수 | [@parkminsu](https://github.com/parkminsu) | Python |
-| 최수현 | [@choisuhyun](https://github.com/choisuhyun) | Python |
+| 김강연 | [@Kimkangyeon-17](https://github.com/Kimkangyeon-17) | Python |
+| 신재혁 | [@Jaehyeok-Seen](https://github.com/Jaehyeok-Seen) | Python |
+| 오창민 | [@mm-sj](https://github.com/mm-sj) | Python |
+| 송민경 | [@Ssongnya](https://github.com/Ssongnya) | Python |
+| 최재각 | [@rerak](https://github.com/rerak) | Python |
 
 ## 📋 스터디 진행 방식
 - **매일**: 정해진 주제의 문제들을 각자 풀이
