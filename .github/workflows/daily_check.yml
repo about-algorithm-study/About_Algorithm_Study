@@ -1,0 +1,46 @@
+# .github/workflows/daily_check.yml
+name: 📊 Daily Algorithm Study Check
+
+on:
+  schedule:
+    # 매일 한국시간 오후 9시 (UTC 12시)에 실행
+    - cron: '0 12 * * *'
+  workflow_dispatch:  # 수동 실행 가능
+    
+jobs:
+  check-daily-progress:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 레포지토리 체크아웃
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Python 설정
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: 📊 일일 진행상황 체크
+      run: |
+        echo "🚀 일일 알고리즘 스터디 체크 시작!"
+        python scripts/daily_check.py
+        
+    - name: 📈 진행률 업데이트
+      run: |
+        echo "📈 진행률 업데이트 시작!"
+        python scripts/update_progress.py
+        
+    - name: 💾 변경사항 커밋 및 푸시
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # 변경사항이 있는지 확인
+        if [[ -n $(git status --porcelain) ]]; then
+          git add .
+          git commit -m "📊 자동 업데이트: $(date +'%Y-%m-%d') 진행상황"
+          git push
+          echo "✅ 진행상황이 업데이트되었습니다!"
+        else
+          echo "ℹ️  업데이트할 변경사항이 없습니다."
+        fi
