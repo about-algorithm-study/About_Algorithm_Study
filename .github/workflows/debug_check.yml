@@ -2,7 +2,7 @@
 name: 🔍 Debug Check
 
 on:
-  workflow_dispatch:  # 수동 실행만
+  workflow_dispatch:
     
 jobs:
   debug-environment:
@@ -21,91 +21,43 @@ jobs:
         echo "📂 현재 작업 디렉토리: $(pwd)"
         echo "📂 디렉토리 내용:"
         ls -la
-        echo ""
-        echo "📁 전체 파일 구조 (깊이 3):"
-        find . -maxdepth 3 -type f | sort
+        
+    - name: 🔍 파일 구조 확인
+      run: |
+        echo "📁 전체 파일 구조:"
+        find . -type f | head -20
         echo ""
         echo "📄 README.md 파일들 찾기:"
         find . -name "README.md" -type f
-        echo ""
+        
+    - name: 🔍 8월3주차 폴더 확인
+      run: |
         echo "📁 8월3주차 폴더 확인:"
         if [ -d "8월3주차" ]; then
           echo "✅ 8월3주차 폴더 존재"
           ls -la "8월3주차/"
-          echo ""
-          echo "📄 8월3주차/README.md 확인:"
           if [ -f "8월3주차/README.md" ]; then
             echo "✅ 8월3주차/README.md 존재"
             echo "파일 크기: $(stat -c%s "8월3주차/README.md") bytes"
-            echo "첫 5줄:"
-            head -5 "8월3주차/README.md"
           else
             echo "❌ 8월3주차/README.md 없음"
           fi
         else
           echo "❌ 8월3주차 폴더 없음"
         fi
-        echo ""
-        echo "🔍 한글 폴더명 문제 확인:"
-        ls -la | grep -E "(월|주차)" || echo "한글 폴더 없음"
         
-    - name: 🧪 파일 생성 테스트
+    - name: 🧪 폴더 생성 테스트
       run: |
-        echo "🧪 파일 생성 테스트"
-        echo "=================="
-        
-        # 8월3주차 폴더가 없으면 생성
-        if [ ! -d "8월3주차" ]; then
-          echo "📁 8월3주차 폴더 생성"
-          mkdir -p "8월3주차"
-        fi
-        
-        # README.md가 없으면 생성
-        if [ ! -f "8월3주차/README.md" ]; then
-          echo "📄 README.md 생성"
-          cat > "8월3주차/README.md" << 'EOF'
-# 8월3주차 - GitHub Actions 테스트
-
-이 파일은 GitHub Actions에서 생성되었습니다.
-
-## 테스트 정보
-- 생성 시간: $(date)
-- 환경: GitHub Actions Ubuntu
-
-## 기본 구조
-- 파일 생성 테스트 완료
-EOF
-        else
-          echo "✅ README.md 이미 존재"
-        fi
-        
-        echo "✅ 테스트 완료"
-        
-    - name: 🔍 생성 후 확인
-      run: |
-        echo "🔍 생성 후 상태 확인"
-        echo "=================="
-        echo "📁 8월3주차 내용:"
-        ls -la "8월3주차/" || echo "폴더 없음"
-        echo ""
-        echo "📄 README.md 내용 확인:"
-        if [ -f "8월3주차/README.md" ]; then
-          echo "✅ 파일 존재"
-          echo "내용:"
-          cat "8월3주차/README.md"
-        else
-          echo "❌ 파일 없음"
-        fi
+        echo "🧪 폴더 생성 테스트"
+        mkdir -p "8월3주차/0820"
+        echo "test file" > "8월3주차/test.txt"
+        echo "✅ 테스트 파일 생성 완료"
+        ls -la "8월3주차/"
         
     - name: 🔍 Git 상태 확인
       run: |
-        echo "🔍 Git 상태 확인"
-        echo "==============="
+        echo "🔍 Git 상태:"
         git status
         echo ""
         echo "📊 최근 커밋:"
         git log --oneline -3
-        echo ""
-        echo "🔄 원격과 비교:"
-        git fetch origin
-        git status
