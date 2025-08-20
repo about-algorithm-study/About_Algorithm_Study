@@ -6,7 +6,7 @@
 ## 🤖 스터디 멤버
 
 | 이름 | GitHub | 주 언어 |
-|------|--------|------|---------|--------|
+|------ |-------------|---------|
 | 홍길동 | [@honggildong](https://github.com/honggildong) | Python |
 | 김철수 | [@kimcheolsu](https://github.com/kimcheolsu) | Python |
 | 이영희 | [@leeyounghee](https://github.com/leeyounghee) | Python |
