@@ -15,9 +15,7 @@ jobs:
     - name: 📥 레포지토리 체크아웃
       uses: actions/checkout@v4
       with:
-        # 모든 히스토리를 가져와서 충돌 방지
-        fetch-depth: 0
-        # Personal Access Token 사용 (권한 문제 해결)
+        fetch-depth: 0  # 전체 히스토리 가져오기
         token: ${{ secrets.GITHUB_TOKEN }}
       
     - name: 🐍 Python 설정
@@ -25,42 +23,127 @@ jobs:
       with:
         python-version: '3.9'
         
-    - name: 🔄 최신 변경사항 가져오기
+    - name: 🔧 Git 설정
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        # 원격 저장소의 최신 변경사항 가져오기
-        git fetch origin
-        git pull origin master --rebase
+        
+    - name: 🔄 최신 변경사항 동기화
+      run: |
+        echo "📡 원격 저장소와 동기화 중..."
+        git fetch origin master
+        
+        # 로컬 변경사항이 있는지 확인
+        if [[ -n $(git status --porcelain) ]]; then
+          echo "⚠️  로컬에 미커밋 변경사항 발견, 스태시에 저장"
+          git stash
+        fi
+        
+        # 원격 master와 동기화
+        git checkout master
+        git reset --hard origin/master
+        
+        # 스태시된 변경사항이 있다면 복원
+        if git stash list | grep -q "stash@{0}"; then
+          echo "📦 스태시 복원 시도..."
+          git stash pop || echo "⚠️  스태시 복원 실패, 계속 진행"
+        fi
+        
+        echo "✅ 동기화 완료"
+        
+    - name: 🔍 현재 상태 확인
+      run: |
+        echo "📂 현재 디렉토리 구조:"
+        ls -la
+        echo ""
+        echo "📁 주차 폴더들:"
+        ls -d *주차 2>/dev/null || echo "주차 폴더 없음"
+        echo ""
+        echo "🔍 Git 상태:"
+        git status --short
         
     - name: 📊 일일 진행상황 체크
       run: |
         echo "🚀 일일 알고리즘 스터디 체크 시작!"
-        python scripts/daily_check.py
+        python scripts/daily_check.py || echo "⚠️  일일 체크 스크립트 실행 중 오류 발생"
         
     - name: 📈 진행률 업데이트
       run: |
         echo "📈 진행률 업데이트 시작!"
-        python scripts/update_progress.py
+        python scripts/update_progress.py || echo "⚠️  진행률 업데이트 스크립트 실행 중 오류 발생"
         
     - name: 💾 변경사항 커밋 및 푸시
       run: |
-        # 변경사항이 있는지 확인
+        echo "💾 변경사항 확인 및 커밋..."
+        
+        # 변경사항 확인
         if [[ -n $(git status --porcelain) ]]; then
-          git add .
-          git commit -m "📊 자동 업데이트: $(date +'%Y-%m-%d') 진행상황"
+          echo "📝 변경사항 발견:"
+          git status --short
           
-          # 충돌 방지를 위한 재시도 로직
-          for i in {1..3}; do
-            if git push origin master; then
-              echo "✅ 진행상황이 업데이트되었습니다!"
-              break
+          # 변경사항 스테이징
+          git add .
+          
+          # 커밋
+          commit_message="📊 자동 업데이트: $(date +'%Y-%m-%d %H:%M') 진행상황"
+          git commit -m "$commit_message"
+          
+          # 푸시 시도 (최대 5회)
+          push_success=false
+          for attempt in {1..5}; do
+            echo "🚀 푸시 시도 $attempt/5..."
+            
+            # 최신 상태로 동기화
+            git fetch origin master
+            
+            # 리베이스 시도
+            if git rebase origin/master; then
+              echo "✅ 리베이스 성공"
+              
+              # 푸시 시도
+              if git push origin master; then
+                echo "✅ 푸시 성공!"
+                push_success=true
+                break
+              else
+                echo "❌ 푸시 실패, 재시도..."
+              fi
             else
-              echo "⚠️  Push 실패, 재시도 중... ($i/3)"
-              git pull origin master --rebase
-              sleep 5
+              echo "❌ 리베이스 실패"
+              # 리베이스 중단
+              git rebase --abort
+              
+              # 강제로 원격과 동기화
+              git reset --hard origin/master
+              
+              # 변경사항 다시 적용
+              python scripts/daily_check.py || true
+              python scripts/update_progress.py || true
+              
+              if [[ -n $(git status --porcelain) ]]; then
+                git add .
+                git commit -m "$commit_message (재시도 $attempt)" || true
+              fi
             fi
+            
+            # 잠시 대기
+            sleep $((attempt * 2))
           done
+          
+          if [ "$push_success" = false ]; then
+            echo "❌ 5회 시도 후에도 푸시 실패"
+            echo "📧 수동 확인이 필요합니다."
+            exit 1
+          fi
+          
         else
           echo "ℹ️  업데이트할 변경사항이 없습니다."
         fi
+        
+    - name: 📋 실행 결과 요약
+      if: always()
+      run: |
+        echo "📋 실행 결과 요약:"
+        echo "- 일일 체크: $([ -f logs/daily_log_$(date +'%Y%m%d').json ] && echo '✅ 완료' || echo '❌ 실패')"
+        echo "- 진행률 업데이트: $([ -f logs/progress_log_$(date +'%Y%m%d').json ] && echo '✅ 완료' || echo '❌ 실패')"
+        echo "- Git 푸시: $(git log --oneline -1 | grep -q '자동 업데이트' && echo '✅ 완료' || echo '❌ 실패')"s
