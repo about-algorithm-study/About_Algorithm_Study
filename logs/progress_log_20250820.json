@@ -3,9 +3,9 @@
   "week_folder": "8월3주차",
   "progress": {
     "김강연": {
-      "solved": 1,
+      "solved": 3,
       "total": 7,
-      "percentage": 14.3,
+      "percentage": 42.9,
       "status": "📈"
     },
     "신재혁": {
@@ -33,10 +33,6 @@
       "status": "📈"
     }
   },
-<<<<<<< HEAD
-  "timestamp": "2025-08-20T16:55:25.123104",
-=======
-  "timestamp": "2025-08-20T07:56:55.943012",
->>>>>>> 78ce08e6ec5ac385654e3690554780401b70b773
+  "timestamp": "2025-08-20T13:35:53.986493",
   "file_structure_type": "problem_folder_based"
 }

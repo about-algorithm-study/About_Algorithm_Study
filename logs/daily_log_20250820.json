@@ -2,8 +2,10 @@
   "date": "20250820",
   "upload_status": {
     "김강연": {
-      "uploaded_count": 1,
+      "uploaded_count": 3,
       "files": [
+        "BOJ_25501/BOJ_25501_김강연.py",
+        "BOJ_10870/BOJ_10870_김강연.py",
         "BOJ_2447/BOJ_2447_김강연.py"
       ],
       "status": "✅"
@@ -29,7 +31,7 @@
       "status": "❌"
     }
   },
-  "timestamp": "2025-08-20T07:56:55.885209",
+  "timestamp": "2025-08-20T13:35:53.941966",
   "week_folder": "8월3주차",
   "checked_paths": [
     "8월3주차"
