@@ -1,0 +1,38 @@
+{
+  "date": "20250820",
+  "week_folder": "8월3주차",
+  "progress": {
+    "김강연": {
+      "solved": 1,
+      "total": 1,
+      "percentage": 100.0,
+      "status": "🔥"
+    },
+    "신재혁": {
+      "solved": 0,
+      "total": 1,
+      "percentage": 0.0,
+      "status": "📈"
+    },
+    "오창민": {
+      "solved": 0,
+      "total": 1,
+      "percentage": 0.0,
+      "status": "📈"
+    },
+    "송민경": {
+      "solved": 0,
+      "total": 1,
+      "percentage": 0.0,
+      "status": "📈"
+    },
+    "최재각": {
+      "solved": 0,
+      "total": 1,
+      "percentage": 0.0,
+      "status": "📈"
+    }
+  },
+  "timestamp": "2025-08-20T07:50:35.885438",
+  "file_structure_type": "problem_folder_based"
+}
