@@ -91,13 +91,12 @@ cd ../BOJ_10870
 
 ```bash
 # 새로운 문제 해결시
-git commit -m "solve: BOJ_27433_김강연 - 팩토리얼2"
-
+git commit -m "solve: BOJ_27433_김강연
 # 코드 수정시  
-git commit -m "fix: BOJ_27433_김강연 - 시간복잡도 개선"
+git commit -m "fix: BOJ_27433_김강연"
 
 # 다른 풀이 추가시
-git commit -m "add: BOJ_27433_김강연 - 다른 접근법 추가"
+git commit -m "add: BOJ_27433_김강연"
 
 # 주차별 README 추가시
 git commit -m "docs: 8월3주차 문제 목록 추가"
@@ -112,7 +111,7 @@ git checkout -b feature/본인이름
 
 # 작업 후 커밋
 git add .
-git commit -m "solve: BOJ_27433_본인이름 - 팩토리얼2"
+git commit -m "solve: BOJ_27433_본인이름"
 
 # 개인 브랜치에 푸시
 git push origin feature/본인이름
@@ -155,7 +154,7 @@ cd BOJ_10870
 
 # 커밋
 git add .
-git commit -m "solve: BOJ_10870_김강연 - 피보나치 수 5"
+git commit -m "solve: BOJ_10870_김강연"
 ```
 
 ### 2-3. 개인 브랜치에 푸시
@@ -167,7 +166,7 @@ git push origin feature/본인이름
 ### 2-4. Pull Request 생성
 1. GitHub 웹사이트 접속
 2. "Compare & pull request" 버튼 클릭
-3. 제목: `solve: BOJ_10870_김강연 - 피보나치 수 5`
+3. 제목: `solve: BOJ_10870_김강연`
 4. "Create pull request" 클릭
 
 ### 2-5. 자동 병합 또는 관리자 병합
@@ -242,7 +241,7 @@ git add 8월3주차/0820/BOJ_27433/BOJ_27433_본인이름.py
 
 #### Step 4: 커밋
 ```bash
-git commit -m "solve: BOJ_27433_본인이름 - 팩토리얼2"
+git commit -m "solve: BOJ_27433_본인이름"
 ```
 
 #### Step 5: 업로드
@@ -334,7 +333,7 @@ mkdir BOJ_27433                    # 문제 폴더 생성
 cd BOJ_27433
 # BOJ_27433_김강연.py 파일 작성
 git add .
-git commit -m "solve: BOJ_27433_김강연 - 팩토리얼2"
+git commit -m "solve: BOJ_27433_김강연"
 git push origin master
 ```
 
