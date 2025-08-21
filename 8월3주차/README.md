@@ -30,6 +30,7 @@
 | 5105 | [파이썬 S/W 문제해결 기본] 6일차 - 미로의 거리 | D3 | BFS | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV2b7Yf6AVtBBCbN) |
 | 10966 | 물놀이를 가자 | D4 | BFS/최단거리 | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AXRSXf_a9qsDFAXS) |
 | 16811 | 당근 포장하기 | D3 | 시뮬레이션 | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AYQJg-kKOWUDFAVB) |
+| 18459 | BFS 연습 | D1 | BFS | [링크](https://swexpertacademy.com/main/talk/solvingClub/problemView.do?solveclubId=AZhurXKaBTvHBINp&contestProbId=AYoGKN3ak2kDFAU6&probBoxId=AZjKF3VK1RvHBIO0&type=USER&problemBoxTitle=0821+Queue+2+%28BFS%29&problemBoxCnt=6) |
 
 ---
 
