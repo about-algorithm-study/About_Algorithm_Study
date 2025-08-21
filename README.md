@@ -213,7 +213,7 @@ git config --global user.name "본인이름"
 git config --global user.email "본인이메일@example.com"
 
 # 2. 레포지토리 클론
-git clone https://github.com/Kimkangyeon-17/Algorithm_Study.git
+git clone https://github.com/about-algorithm-study/About_Algorithm_Study.git
 cd Algorithm_Study
 
 # 3. 원격 저장소 확인
