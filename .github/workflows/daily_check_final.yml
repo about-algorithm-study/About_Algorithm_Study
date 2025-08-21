@@ -1,8 +1,8 @@
 # .github/workflows/daily_check_final.yml
-name: 📊 Daily Check (NEW STRUCTURE)
+name: 📊 Daily Check (Organization)
 
 on:
-  workflow_dispatch:  # 수동 실행으로 테스트
+  workflow_dispatch:  # 수동 실행
   schedule:
     - cron: '0 15 * * *'  # 매일 한국시간 오후 12시 (UTC 15시)
     
@@ -14,7 +14,8 @@ jobs:
     - name: 📥 체크아웃
       uses: actions/checkout@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # Organization Secret 사용
+        fetch-depth: 0
       
     - name: 🐍 Python 설정
       uses: actions/setup-python@v4
@@ -33,28 +34,30 @@ jobs:
         ls -la
         echo ""
         echo "📄 README 파일들:"
-        find . -name "README.md"
+        find . -name "README.md" 2>/dev/null || echo "README 파일 없음"
         echo ""
         echo "📁 주차 폴더 구조:"
-        ls -la "8월3주차/" || echo "8월3주차 폴더 없음"
+        ls -la "8월3주차/" 2>/dev/null || echo "8월3주차 폴더 없음"
         echo ""
         echo "📅 날짜 폴더 구조:"
-        ls -la "8월3주차/0820/" || echo "0820 폴더 없음"
+        ls -la "8월3주차/0821/" 2>/dev/null || echo "0821 폴더 없음"
+        ls -la "8월3주차/0820/" 2>/dev/null || echo "0820 폴더 없음"
         echo ""
-        echo "🗂️ 문제 폴더들 (새 구조):"
-        find "8월3주차/0820/" -type d -name "BOJ_*" 2>/dev/null || echo "문제 폴더 없음"
+        echo "🗂️ 문제 폴더들:"
+        find "8월3주차/" -type d -name "BOJ_*" 2>/dev/null || echo "BOJ 문제 폴더 없음"
+        find "8월3주차/" -type d -name "SWEA_*" 2>/dev/null || echo "SWEA 문제 폴더 없음"
         echo ""
         echo "📝 Python 파일들:"
-        find "8월3주차/0820/" -name "*.py" 2>/dev/null || echo "Python 파일 없음"
+        find "8월3주차/" -name "*.py" 2>/dev/null || echo "Python 파일 없음"
         
-    - name: 📊 일일 진행상황 체크 (새 구조)
+    - name: 📊 일일 진행상황 체크
       run: |
-        echo "🚀 일일 알고리즘 스터디 체크 시작! (문제별 폴더 구조)"
+        echo "🚀 일일 알고리즘 스터디 체크 시작!"
         python scripts/daily_check.py
         
-    - name: 📈 진행률 업데이트 (새 구조)
+    - name: 📈 진행률 업데이트
       run: |
-        echo "📈 진행률 업데이트 시작! (문제별 폴더 구조)"
+        echo "📈 진행률 업데이트 시작!"
         python scripts/update_progress.py
         
     - name: 🔍 실행 후 상세 확인
@@ -63,34 +66,39 @@ jobs:
         git status
         echo ""
         echo "📊 생성된 로그:"
-        ls -la logs/ || echo "로그 폴더 없음"
+        ls -la logs/ 2>/dev/null || echo "로그 폴더 없음"
         echo ""
         echo "📋 로그 내용 미리보기:"
-        if [ -f logs/daily_log_$(date +%Y%m%d).json ]; then
+        TODAY=$(date +%Y%m%d)
+        if [ -f "logs/daily_log_${TODAY}.json" ]; then
           echo "=== 오늘의 일일 로그 ==="
-          cat logs/daily_log_$(date +%Y%m%d).json
+          head -20 "logs/daily_log_${TODAY}.json"
         fi
         echo ""
-        if [ -f logs/progress_log_$(date +%Y%m%d).json ]; then
+        if [ -f "logs/progress_log_${TODAY}.json" ]; then
           echo "=== 오늘의 진행률 로그 ==="
-          cat logs/progress_log_$(date +%Y%m%d).json
+          head -20 "logs/progress_log_${TODAY}.json"
         fi
         
-    - name: 💾 커밋 및 푸시
+    - name: 💾 변경사항 커밋 및 푸시
+      env:
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # 환경변수로 토큰 설정
       run: |
         if [[ -n $(git status --porcelain) ]]; then
           echo "📝 변경사항 발견 - 자동 커밋 진행"
           git add .
-          git commit -m "📊 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 새로운 문제별 폴더 구조"
+          git commit -m "📊 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - Organization 통합 관리"
           git push origin master
           echo "✅ 푸시 완료!"
         else
-          echo "ℹ️  변경사항 없음 - 커밋할 내용이 없습니다"
+          echo "ℹ️ 변경사항 없음 - 커밋할 내용이 없습니다"
         fi
 
     - name: 📊 결과 요약
       run: |
-        echo "🎯 GitHub Actions 실행 완료!"
+        echo "🎉 GitHub Actions 실행 완료!"
+        echo "🏢 Organization: about-algorithm-study"
         echo "📈 스터디 멤버: 김강연, 신재혁, 오창민, 송민경, 최재각"
-        echo "📁 파일 구조: 8월3주차/0820/BOJ_문제번호/BOJ_문제번호_이름.py"
-        echo "🤖 자동화: 일일 체크 + 진행률 업데이트"
+        echo "📁 파일 구조: 8월3주차/날짜/문제폴더/파일명.py"
+        echo "🤖 자동화: 일일 체크 + 진행률 업데이트 + Organization 동기화"
+        echo "🔗 결과 확인: https://github.com/about-algorithm-study/About_Algorithm_Study"
