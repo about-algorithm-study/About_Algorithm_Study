@@ -9,9 +9,9 @@
       "status": "📈"
     },
     "신재혁": {
-      "solved": 0,
+      "solved": 1,
       "total": 13,
-      "percentage": 0.0,
+      "percentage": 7.7,
       "status": "📈"
     },
     "오창민": {
@@ -33,6 +33,6 @@
       "status": "📈"
     }
   },
-  "timestamp": "2025-08-21T08:48:12.600345",
+  "timestamp": "2025-08-21T13:26:00.477953",
   "file_structure_type": "problem_folder_based"
 }

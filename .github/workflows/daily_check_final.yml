@@ -14,9 +14,20 @@ jobs:
     - name: 📥 체크아웃
       uses: actions/checkout@v4
       with:
-        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # Organization Secret 사용
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         fetch-depth: 0
+        # 최신 상태로 강제 동기화
+        ref: master
       
+    - name: 🔄 최신 상태 확인 및 동기화
+      env:
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      run: |
+        echo "🔄 원격 저장소와 동기화 중..."
+        git fetch origin master
+        git reset --hard origin/master
+        echo "✅ 최신 상태로 동기화 완료"
+        
     - name: 🐍 Python 설정
       uses: actions/setup-python@v4
       with:
@@ -80,16 +91,59 @@ jobs:
           head -20 "logs/progress_log_${TODAY}.json"
         fi
         
-    - name: 💾 변경사항 커밋 및 푸시
+    - name: 💾 변경사항 커밋 및 푸시 (충돌 방지 로직 추가)
       env:
-        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # 환경변수로 토큰 설정
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
         if [[ -n $(git status --porcelain) ]]; then
           echo "📝 변경사항 발견 - 자동 커밋 진행"
+          
+          # 다시 한번 최신 상태 확인
+          echo "🔄 푸시 전 최신 상태 재확인..."
+          git fetch origin master
+          
+          # 원격과 차이가 있는지 확인
+          if ! git diff --quiet HEAD origin/master; then
+            echo "⚠️ 원격에 새로운 변경사항 발견 - 병합 시도"
+            git pull --no-edit origin master || {
+              echo "❌ 자동 병합 실패 - 수동 처리 필요"
+              exit 1
+            }
+          fi
+          
+          # 변경사항 추가 및 커밋
           git add .
           git commit -m "📊 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - Organization 통합 관리"
-          git push origin master
-          echo "✅ 푸시 완료!"
+          
+          # 푸시 재시도 로직
+          MAX_RETRIES=3
+          RETRY_COUNT=0
+          
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            echo "🚀 푸시 시도 ($((RETRY_COUNT + 1))/$MAX_RETRIES)..."
+            
+            if git push origin master; then
+              echo "✅ 푸시 성공!"
+              break
+            else
+              echo "❌ 푸시 실패 - 재시도 준비 중..."
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+              
+              if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+                echo "🔄 최신 변경사항 다시 가져오기..."
+                git fetch origin master
+                git pull --no-edit origin master || {
+                  echo "❌ 병합 실패"
+                  exit 1
+                }
+                echo "⏳ 3초 대기 후 재시도..."
+                sleep 3
+              else
+                echo "❌ 최대 재시도 횟수 초과 - 실패"
+                exit 1
+              fi
+            fi
+          done
         else
           echo "ℹ️ 변경사항 없음 - 커밋할 내용이 없습니다"
         fi
