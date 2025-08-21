@@ -6,7 +6,7 @@ from datetime import datetime, date
 from collections import defaultdict
 
 # 스터디 멤버 리스트 (실제 이름으로 업데이트)
-MEMBERS = ["김강연", "신재혁", "오창민", "송민경", "최재각"]
+MEMBERS = ["kky", "sjh", "ocm", "smk", "최재각"]
 
 
 def find_all_week_folders():
