@@ -10,9 +10,11 @@
       "status": "✅"
     },
     "신재혁": {
-      "uploaded_count": 0,
-      "files": [],
-      "status": "❌"
+      "uploaded_count": 1,
+      "files": [
+        "SWEA_5102/SWEA_5102_신재혁.py"
+      ],
+      "status": "✅"
     },
     "오창민": {
       "uploaded_count": 1,
@@ -32,7 +34,7 @@
       "status": "❌"
     }
   },
-  "timestamp": "2025-08-21T12:43:03.446433",
+  "timestamp": "2025-08-21T13:26:00.430315",
   "week_folder": "8월3주차",
   "checked_paths": [
     "8월3주차"
