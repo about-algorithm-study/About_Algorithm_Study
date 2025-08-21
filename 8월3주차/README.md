@@ -19,6 +19,18 @@
 | 2447 | 별 찍기 - 10 | Gold V | 선택 | [링크](https://www.acmicpc.net/problem/2447) |
 | 11729 | 하노이 탑 이동 순서 | Gold V | 선택 | [링크](https://www.acmicpc.net/problem/11729) |
 
+### 8월 21일 (수)
+
+- SWEA (SW Expert Academy) 문제
+
+| 번호 | 문제명 | 난이도 | 분류 | 링크 |
+|------|---------|--------|------|------|
+| 1226 | [S/W 문제해결 기본] 7일차 - 미로1 | D4 | DFS/BFS | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV14vXUqAGMCFAYD) |
+| 5102 | [파이썬 S/W 문제해결 기본] 6일차 - 노드의 거리 | D2 | BFS/그래프 | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV2b7Yf6AVtBBCbN) |
+| 5105 | [파이썬 S/W 문제해결 기본] 6일차 - 미로의 거리 | D3 | BFS | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV2b7Yf6AVtBBCbN) |
+| 10966 | 물놀이를 가자 | D4 | BFS/최단거리 | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AXRSXf_a9qsDFAXS) |
+| 16811 | 당근 포장하기 | D3 | 시뮬레이션 | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AYQJg-kKOWUDFAVB) |
+
 ---
 
 ## 📊 진행 현황
