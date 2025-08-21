@@ -1,0 +1,41 @@
+{
+  "date": "20250821",
+  "upload_status": {
+    "김강연": {
+      "uploaded_count": 2,
+      "files": [
+        "SWEA_18459/SWEA_18459_김강연.py",
+        "SWEA_5102/SWEA_5102_김강연.py"
+      ],
+      "status": "✅"
+    },
+    "신재혁": {
+      "uploaded_count": 0,
+      "files": [],
+      "status": "❌"
+    },
+    "오창민": {
+      "uploaded_count": 1,
+      "files": [
+        "SWEA_18459/SWEA_18459_오창민.py"
+      ],
+      "status": "✅"
+    },
+    "송민경": {
+      "uploaded_count": 0,
+      "files": [],
+      "status": "❌"
+    },
+    "최재각": {
+      "uploaded_count": 0,
+      "files": [],
+      "status": "❌"
+    }
+  },
+  "timestamp": "2025-08-21T08:48:12.557219",
+  "week_folder": "8월3주차",
+  "checked_paths": [
+    "8월3주차"
+  ],
+  "file_structure_type": "problem_folder_based"
+}
