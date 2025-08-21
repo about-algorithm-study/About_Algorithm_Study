@@ -14,6 +14,8 @@ for t in range(1, T + 1):
             diff.append(i)
 
     min_diff = 10000000
+    found = False
+
     for i in diff:
         for j in diff:
 
@@ -29,7 +31,11 @@ for t in range(1, T + 1):
             if max(small, middle, large) > size:
                 continue
             
+            found = True
             result = max(small, middle, large) - min(small, middle, large)
             min_diff = min(min_diff, result)
+    
+    if not found:
+        min_diff = -1
 
-    print(f"#{t} {result}")
+    print(f"#{t} {min_diff}")
