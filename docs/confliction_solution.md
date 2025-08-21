@@ -6,11 +6,11 @@
 
 ```
 master (메인)
-├── feature/김강연 (김강연 전용)
-├── feature/신재혁 (신재혁 전용)  
-├── feature/오창민 (오창민 전용)
-├── feature/송민경 (송민경 전용)
-└── feature/최재각 (최재각 전용)
+├── feature/kky (김강연 전용)
+├── feature/sjh (신재혁 전용)  
+├── feature/ocm (오창민 전용)
+├── feature/smk (송민경 전용)
+└── feature/cjg (최재각 전용)
 ```
 
 ---
@@ -24,23 +24,23 @@ git checkout master
 git pull origin master
 
 # 개인 브랜치 생성 및 이동
-git checkout -b feature/본인이름
-# 예: git checkout -b feature/김강연
+git checkout -b feature/본인이니셜
+# 예: git checkout -b feature/kky
 
 # 개인 브랜치를 원격에 푸시
-git push -u origin feature/본인이름
+git push -u origin feature/본인이니셜
 ```
 
 ### 1-2. 브랜치 확인
 ```bash
 # 현재 브랜치 확인
 git branch
-# * feature/김강연  ← 현재 브랜치
+# * feature/kky  ← 현재 브랜치
 #   master
 
 # 원격 브랜치 확인
 git branch -r
-# origin/feature/김강연
+# origin/feature/kky
 # origin/master
 ```
 
@@ -52,14 +52,14 @@ git branch -r
 ```bash
 # 1) 개인 브랜치에 있는지 확인
 git branch
-# * feature/김강연  ← 확인!
+# * feature/kky  ← 확인!
 
 # 2) master의 최신 변경사항 가져오기
 git checkout master
 git pull origin master
 
 # 3) 개인 브랜치로 돌아가서 master 변경사항 병합
-git checkout feature/본인이름
+git checkout feature/본인이니셜
 git merge master
 # 또는 git rebase master (더 깔끔한 히스토리)
 ```
@@ -72,23 +72,23 @@ mkdir BOJ_10870  # 아직 없다면
 cd BOJ_10870
 
 # 본인 파일 작성
-# BOJ_10870_김강연.py 파일 생성하고 문제 풀이
+# BOJ_10870_kky.py 파일 생성하고 문제 풀이
 
 # 커밋
 git add .
-git commit -m "solve: BOJ_10870_김강연 - 피보나치 수 5"
+git commit -m "solve: BOJ_10870_kky"
 ```
 
 ### 2-3. 개인 브랜치에 푸시
 ```bash
 # 개인 브랜치에 푸시 (충돌 위험 0%)
-git push origin feature/본인이름
+git push origin feature/본인이니셜
 ```
 
 ### 2-4. Pull Request 생성
 1. GitHub 웹사이트 접속
 2. "Compare & pull request" 버튼 클릭
-3. 제목: `solve: BOJ_10870_김강연 - 피보나치 수 5`
+3. 제목: `solve: BOJ_10870_kky`
 4. "Create pull request" 클릭
 
 ### 2-5. 자동 병합 또는 관리자 병합
@@ -102,25 +102,25 @@ git push origin feature/본인이름
 ### ✅ 절대 안전한 작업들
 ```bash
 # 1. 본인 파일만 생성/수정
-8월3주차/0820/BOJ_10870/BOJ_10870_김강연.py  ← 안전!
+8월3주차/0820/BOJ_10870/BOJ_10870_kky.py  ← 안전!
 
 # 2. 개인 브랜치에서만 작업
-git checkout feature/김강연  ← 안전!
+git checkout feature/kky  ← 안전!
 
 # 3. 개인 브랜치에만 푸시
-git push origin feature/김강연  ← 안전!
+git push origin feature/kky  ← 안전!
 ```
 
 ### ❌ 절대 하면 안 되는 것들
 ```bash
 # 1. 다른 사람 파일 수정 금지
-BOJ_10870_신재혁.py  ← 절대 건드리지 말기!
+BOJ_10870_sjh.py  ← 절대 건드리지 말기!
 
 # 2. master 브랜치에 직접 푸시 금지
 git push origin master  ← 금지!
 
 # 3. 다른 사람 브랜치에 푸시 금지
-git push origin feature/신재혁  ← 금지!
+git push origin feature/sjh  ← 금지!
 ```
 
 ---
@@ -129,13 +129,13 @@ git push origin feature/신재혁  ← 금지!
 
 ### 시나리오 1: 같은 문제를 동시에 풀 때
 ```
-상황: 김강연과 신재혁이 동시에 BOJ_10870 문제를 풀고 있음
+상황: kky와 sjh이 동시에 BOJ_10870 문제를 풀고 있음
 
 해결책:
 1. 각자 개인 브랜치에서 작업
 2. 각자 BOJ_10870 폴더 안에 본인 파일만 생성
-   - BOJ_10870_김강연.py
-   - BOJ_10870_신재혁.py
+   - BOJ_10870_kky.py
+   - BOJ_10870_sjh.py
 3. 각자 PR 생성 → 순서대로 병합
 4. 결과: 충돌 없이 두 파일 모두 master에 존재!
 ```
@@ -145,7 +145,7 @@ git push origin feature/신재혁  ← 금지!
 상황: README.md 파일을 수정해야 함
 
 해결책:
-1. 관리자(김강연)만 README 수정 권한
+1. 관리자(kky)만 README 수정 권한
 2. 다른 멤버들은 README 건드리지 않기
 3. 또는 README 수정용 별도 브랜치 생성
 ```
@@ -173,7 +173,7 @@ git branch -a
 git log --oneline --graph --all
 
 # 개인 브랜치와 master 차이점 확인
-git log master..feature/본인이름
+git log master..feature/본인이니셜
 
 # 현재 브랜치 상태
 git status
@@ -186,11 +186,11 @@ git checkout master
 git pull origin master
 
 # 2. 개인 브랜치에 master 변경사항 반영
-git checkout feature/본인이름
+git checkout feature/본인이니셜
 git merge master
 
 # 3. 개인 브랜치 푸시
-git push origin feature/본인이름
+git push origin feature/본인이니셜
 ```
 
 ---
@@ -202,7 +202,7 @@ git push origin feature/본인이름
 # 해결책: master의 최신 변경사항 가져오기
 git checkout master
 git pull origin master
-git checkout feature/본인이름
+git checkout feature/본인이니셜
 git merge master
 ```
 
@@ -219,7 +219,7 @@ git merge master
 ```bash
 # 해결책: 커밋을 올바른 브랜치로 이동
 git log --oneline  # 커밋 해시 확인
-git checkout feature/본인이름
+git checkout feature/본인이니셜
 git cherry-pick 커밋해시
 ```
 
@@ -227,14 +227,14 @@ git cherry-pick 커밋해시
 ```bash
 # 로컬 브랜치 삭제
 git checkout master
-git branch -D feature/본인이름
+git branch -D feature/본인이니셜
 
 # 원격 브랜치 삭제
-git push origin --delete feature/본인이름
+git push origin --delete feature/본인이니셜
 
 # 새로 시작
-git checkout -b feature/본인이름
-git push -u origin feature/본인이름
+git checkout -b feature/본인이니셜
+git push -u origin feature/본인이니셜
 ```
 
 ---
@@ -243,9 +243,9 @@ git push -u origin feature/본인이름
 
 ### 파일 생성 규칙 (충돌 방지)
 ```
-✅ 허용: 본인 이름이 포함된 파일만
-BOJ_10870_김강연.py  ← OK
-BOJ_10870_신재혁.py  ← OK
+✅ 허용: 본인 이니셜이 포함된 파일만
+BOJ_10870_kky.py  ← OK
+BOJ_10870_sjh.py  ← OK
 
 ❌ 금지: 공통 파일 수정
 README.md  ← 관리자만
@@ -254,9 +254,9 @@ README.md  ← 관리자만
 
 ### PR 제목 규칙
 ```
-solve: BOJ_10870_김강연 - 피보나치 수 5
-fix: BOJ_10870_김강연 - 시간복잡도 개선
-add: BOJ_10870_김강연 - 다른 접근법 추가
+solve: BOJ_10870_kky - 피보나치 수 5
+fix: BOJ_10870_kky - 시간복잡도 개선
+add: BOJ_10870_kky - 다른 접근법 추가
 ```
 
 ### 커밋 주기

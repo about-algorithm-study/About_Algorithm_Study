@@ -107,14 +107,14 @@ git commit -m "docs: 8월3주차 문제 목록 추가"
 #### Option 1: 개인 브랜치 사용 (권장)
 ```bash
 # 개인 브랜치 생성 및 이동
-git checkout -b feature/본인이름
+git checkout -b feature/본인이니셜(예시 kky)
 
 # 작업 후 커밋
 git add .
 git commit -m "solve: BOJ_27433_본인이름"
 
 # 개인 브랜치에 푸시
-git push origin feature/본인이름
+git push origin feature/본인이니셜(예시 kky)
 
 # master에 머지 (온라인에서 Pull Request 생성)
 ```
@@ -137,7 +137,7 @@ git checkout master
 git pull origin master
 
 # 3) 개인 브랜치로 돌아가서 master 변경사항 병합
-git checkout feature/본인이름
+git checkout feature/본인이니셜(예시 kky)
 git merge master
 # 또는 git rebase master (더 깔끔한 히스토리)
 ```
@@ -160,7 +160,7 @@ git commit -m "solve: BOJ_10870_김강연"
 ### 2-3. 개인 브랜치에 푸시
 ```bash
 # 개인 브랜치에 푸시 (충돌 위험 0%)
-git push origin feature/본인이름
+git push origin feature/본인이니셜(예시 kky)
 ```
 
 ### 2-4. Pull Request 생성
@@ -183,10 +183,10 @@ git push origin feature/본인이름
 8월3주차/0820/BOJ_10870/BOJ_10870_김강연.py  ← 안전!
 
 # 2. 개인 브랜치에서만 작업
-git checkout feature/김강연  ← 안전!
+git checkout feature/본인이니셜(예시 kky)  ← 안전!
 
 # 3. 개인 브랜치에만 푸시
-git push origin feature/김강연  ← 안전!
+git push origin feature/본인이니셜(예시 kky)  ← 안전!
 ```
 
 ### ❌ 절대 하면 안 되는 것들
@@ -198,7 +198,7 @@ BOJ_10870_신재혁.py  ← 절대 건드리지 말기!
 git push origin master  ← 금지!
 
 # 3. 다른 사람 브랜치에 푸시 금지
-git push origin feature/신재혁  ← 금지!
+git push origin feature/sjh  ← 금지!
 ```
 
 ---

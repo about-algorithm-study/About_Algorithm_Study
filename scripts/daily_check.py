@@ -5,7 +5,7 @@ from datetime import datetime, date
 import glob
 
 # 스터디 멤버 리스트 (실제 이름으로 업데이트)
-MEMBERS = ["김강연", "신재혁", "오창민", "송민경", "최재각"]
+MEMBERS = ["kky", "sjh", "ocm", "smk", "cjg"]
 
 
 def get_current_week_folder():

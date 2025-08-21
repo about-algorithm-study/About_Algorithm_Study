@@ -152,7 +152,7 @@ jobs:
       run: |
         echo "🎉 GitHub Actions 실행 완료!"
         echo "🏢 Organization: about-algorithm-study"
-        echo "📈 스터디 멤버: 김강연, 신재혁, 오창민, 송민경, 최재각"
+        echo "📈 스터디 멤버: kky, sjh, ocm, smk, cjg"
         echo "📁 파일 구조: 8월3주차/날짜/문제폴더/파일명.py"
         echo "🤖 자동화: 일일 체크 + 진행률 업데이트 + Organization 동기화"
         echo "🔗 결과 확인: https://github.com/about-algorithm-study/About_Algorithm_Study"
