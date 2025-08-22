@@ -5,33 +5,33 @@
     "0820": {
       "김강연": {
         "solved": 3,
-        "total": 3,
-        "percentage": 100.0,
-        "status": "🔥"
+        "total": 6,
+        "percentage": 50.0,
+        "status": "💪"
       },
       "신재혁": {
         "solved": 0,
-        "total": 3,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       },
       "오창민": {
         "solved": 2,
-        "total": 3,
-        "percentage": 66.7,
-        "status": "💪"
+        "total": 6,
+        "percentage": 33.3,
+        "status": "📈"
       },
       "송민경": {
         "solved": 1,
-        "total": 3,
-        "percentage": 33.3,
+        "total": 6,
+        "percentage": 16.7,
         "status": "📈"
       },
       "최재각": {
         "solved": 2,
-        "total": 3,
-        "percentage": 66.7,
-        "status": "💪"
+        "total": 6,
+        "percentage": 33.3,
+        "status": "📈"
       }
     },
     "0821": {
@@ -68,10 +68,10 @@
     },
     "0822": {
       "김강연": {
-        "solved": 0,
+        "solved": 3,
         "total": 4,
-        "percentage": 0.0,
-        "status": "📈"
+        "percentage": 75.0,
+        "status": "⚡"
       },
       "신재혁": {
         "solved": 0,
@@ -99,6 +99,6 @@
       }
     }
   },
-  "timestamp": "2025-08-22T04:23:06.008140",
+  "timestamp": "2025-08-22T15:19:06.193130",
   "file_structure_type": "cumulative_daily_progress_tracking"
 }
