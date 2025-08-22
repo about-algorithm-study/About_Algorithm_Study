@@ -8,7 +8,7 @@
 
 ## 📝 문제 목록
 
-### 8월 20일 (화)
+### 8월 20일 (수)
 | 번호 | 문제명 | 난이도 | 분류 | 링크 |
 |------|---------|--------|------|------|
 | 27433 | 팩토리얼2 | Bronze V | 필수 | [링크](https://www.acmicpc.net/problem/27433) |
@@ -19,7 +19,7 @@
 | 2447 | 별 찍기 - 10 | Gold V | 선택 | [링크](https://www.acmicpc.net/problem/2447) |
 | 11729 | 하노이 탑 이동 순서 | Gold V | 선택 | [링크](https://www.acmicpc.net/problem/11729) |
 
-### 8월 21일 (수)
+### 8월 21일 (목)
 
 - SWEA (SW Expert Academy) 문제
 
@@ -32,6 +32,16 @@
 | 16811 | 당근 포장하기 | D3 | 시뮬레이션 | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AYQJg-kKOWUDFAVB) |
 | 18459 | BFS 연습 | D1 | BFS | [링크](https://swexpertacademy.com/main/talk/solvingClub/problemView.do?solveclubId=AZhurXKaBTvHBINp&contestProbId=AYoGKN3ak2kDFAU6&probBoxId=AZjKF3VK1RvHBIO0&type=USER&problemBoxTitle=0821+Queue+2+%28BFS%29&problemBoxCnt=6) |
 
+### 8월 22일(금)
+
+- SWEA (SW Expert Academy) 문제
+
+| 번호 | 문제명 | 난이도 | 분류 | 링크 |
+|------|---------|--------|------|------|
+| 11315 | 오목 판정 | D3 | 구현/완전탐색 | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AXtoV_9a46wDFAXS) |
+| 5174 | [파이썬 S/W 문제해결 기본] - subtree | D2 | 트리/재귀 | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV2nVcN6AOUDFAXo) |
+| 5178 | [파이썬 S/W 문제해결 기본] - 노드의 합 | D3 | 트리/재귀 | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV2nWqJ6AOcDFAXo) |
+| 18544 | 전위 순회 | D2 | 트리/순회 | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AYoF7MhKWg4DFAWa) |
 ---
 
 ## 📊 진행 현황
