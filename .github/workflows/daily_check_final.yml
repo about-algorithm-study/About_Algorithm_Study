@@ -53,6 +53,7 @@ jobs:
         echo "📅 날짜 폴더 구조:"
         ls -la "8월3주차/0821/" 2>/dev/null || echo "0821 폴더 없음"
         ls -la "8월3주차/0820/" 2>/dev/null || echo "0820 폴더 없음"
+        ls -la "8월3주차/0822/" 2>/dev/null || echo "0822 폴더 없음"
         echo ""
         echo "🗂️ 문제 폴더들:"
         find "8월3주차/" -type d -name "BOJ_*" 2>/dev/null || echo "BOJ 문제 폴더 없음"
@@ -66,10 +67,10 @@ jobs:
         echo "🚀 일일 알고리즘 스터디 체크 시작!"
         python scripts/daily_check.py
         
-    - name: 📈 진행률 업데이트
+    - name: 📈 일별 진행률 업데이트
       run: |
-        echo "📈 진행률 업데이트 시작!"
-        python scripts/update_progress.py
+        echo "📅 일별 진행률 업데이트 시작!"
+        python scripts/update_daily_progress.py
         
     - name: 🔍 실행 후 상세 확인
       run: |
@@ -86,9 +87,16 @@ jobs:
           head -20 "logs/daily_log_${TODAY}.json"
         fi
         echo ""
-        if [ -f "logs/progress_log_${TODAY}.json" ]; then
-          echo "=== 오늘의 진행률 로그 ==="
-          head -20 "logs/progress_log_${TODAY}.json"
+        TARGET_DATE=$(date +%m%d)
+        if [ -f "logs/daily_progress_${TARGET_DATE}_${TODAY}.json" ]; then
+          echo "=== 오늘의 일별 진행률 로그 ==="
+          head -20 "logs/daily_progress_${TARGET_DATE}_${TODAY}.json"
+        fi
+        echo ""
+        echo "📄 README 파일 확인:"
+        if [ -f "8월3주차/README.md" ]; then
+          echo "=== README 진행 현황 섹션 ==="
+          grep -A 15 "## 📊 진행 현황" "8월3주차/README.md" || echo "진행 현황 섹션 없음"
         fi
         
     - name: 💾 변경사항 커밋 및 푸시 (충돌 방지 로직 추가)
@@ -113,7 +121,8 @@ jobs:
           
           # 변경사항 추가 및 커밋
           git add .
-          git commit -m "📊 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - Organization 통합 관리"
+          TARGET_DATE=$(date +%m%d)
+          git commit -m "📅 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 일별 진행률 ($TARGET_DATE)"
           
           # 푸시 재시도 로직
           MAX_RETRIES=3
@@ -152,7 +161,8 @@ jobs:
       run: |
         echo "🎉 GitHub Actions 실행 완료!"
         echo "🏢 Organization: about-algorithm-study"
-        echo "📈 스터디 멤버: kky, sjh, ocm, smk, cjg"
+        echo "📈 스터디 멤버: 김강연, 신재혁, 오창민, 송민경, 최재각"
         echo "📁 파일 구조: 8월3주차/날짜/문제폴더/파일명.py"
-        echo "🤖 자동화: 일일 체크 + 진행률 업데이트 + Organization 동기화"
+        echo "🤖 자동화: 일일 체크 + 일별 진행률 업데이트 + Organization 동기화"
+        echo "📅 일별 진행률: 매일 해당 날짜의 문제들에 대한 개별 진행률 계산"
         echo "🔗 결과 확인: https://github.com/about-algorithm-study/About_Algorithm_Study"
