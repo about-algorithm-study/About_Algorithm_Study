@@ -1,45 +1,43 @@
-# scripts/daily_check.py - 문제별 폴더 구조 대응 버전
+# scripts/daily_check.py - 일별 진행률과 연동된 버전
 import os
 import json
 from datetime import datetime, date
 import glob
 
 # 스터디 멤버 리스트 (실제 이름으로 업데이트)
-MEMBERS = ["kky", "sjh", "ocm", "smk", "cjg"]
-
+MEMBERS = ["김강연", "신재혁", "오창민", "송민경", "최재각"]
+MEMBER_MAPPING = {
+    "김강연": "kky",
+    "신재혁": "sjh", 
+    "오창민": "ocm",
+    "송민경": "smk",
+    "최재각": "cjg"
+}
 
 def get_current_week_folder():
     """현재 주차 폴더명 반환"""
     today = date.today()
     month = today.month
-
-    # 실제 달력 기준으로 주차 계산
-    first_day = date(today.year, month, 1)
     week_number = ((today.day - 1) // 7) + 1
-
     return f"{month}월{week_number}주차"
-
 
 def get_today_folder():
     """오늘 날짜 폴더명 반환 (MMDD 형식)"""
     return datetime.now().strftime("%m%d")
-
 
 def find_week_folders():
     """현재 월의 모든 주차 폴더 찾기"""
     current_month = date.today().month
     week_folders = []
 
-    # 현재 디렉토리에서 월 주차 폴더 찾기
     for item in os.listdir("."):
         if os.path.isdir(item) and f"{current_month}월" in item and "주차" in item:
             week_folders.append(item)
 
     return sorted(week_folders)
 
-
 def check_today_uploads():
-    """오늘 업로드된 파일들 체크 - 문제별 폴더 구조 대응"""
+    """오늘 업로드된 파일들 체크 - 일별 진행률 연동"""
     week_folder = get_current_week_folder()
     today_folder = get_today_folder()
 
@@ -47,12 +45,19 @@ def check_today_uploads():
     possible_paths = [
         f"{week_folder}/{today_folder}",
         f"{week_folder}/0820",  # 고정된 날짜 (임시)
+        f"{week_folder}/0821",  # 고정된 날짜 (임시)
+        f"{week_folder}/0822",  # 고정된 날짜 (임시)
     ]
 
     # 기존 주차 폴더들도 확인
     week_folders = find_week_folders()
     for wf in week_folders:
-        possible_paths.extend([f"{wf}/{today_folder}", f"{wf}/0820"])
+        possible_paths.extend([
+            f"{wf}/{today_folder}", 
+            f"{wf}/0820", 
+            f"{wf}/0821", 
+            f"{wf}/0822"
+        ])
 
     folder_path = None
     for path in possible_paths:
@@ -75,13 +80,13 @@ def check_today_uploads():
 
     for member in MEMBERS:
         member_files = []
+        member_id = MEMBER_MAPPING[member]
 
         try:
-            # 날짜 폴더 안의 모든 문제 폴더 확인
             if os.path.exists(folder_path):
                 items = os.listdir(folder_path)
 
-                # 문제 폴더들 찾기 (BOJ_, PRO_ 등으로 시작하는 폴더)
+                # 문제 폴더들 찾기 (BOJ_, PRO_, SWEA_ 등으로 시작하는 폴더)
                 problem_folders = [
                     item
                     for item in items
@@ -96,16 +101,15 @@ def check_today_uploads():
                     problem_path = os.path.join(folder_path, problem_folder)
 
                     if os.path.isdir(problem_path):
-                        # 문제 폴더 안의 파일들 확인
                         problem_files = os.listdir(problem_path)
 
-                        # 해당 멤버의 파일 찾기
+                        # 해당 멤버의 파일 찾기 (이름 또는 이니셜로)
                         for file in problem_files:
-                            if member in file and file.endswith(".py"):
+                            if (member in file or member_id in file) and file.endswith(".py"):
                                 member_files.append(f"{problem_folder}/{file}")
 
         except Exception as e:
-            print(f"⚠️  {folder_path} 읽기 오류: {e}")
+            print(f"⚠️ {folder_path} 읽기 오류: {e}")
 
         upload_status[member] = {
             "uploaded_count": len(member_files),
@@ -115,13 +119,13 @@ def check_today_uploads():
 
     return upload_status
 
-
 def print_daily_report(upload_status):
-    """일일 리포트 출력"""
+    """일일 리포트 출력 - 개선된 버전"""
     today = datetime.now().strftime("%Y-%m-%d")
+    today_folder = get_today_folder()
 
-    print(f"\n📊 알고리즘 스터디 일일 리포트 ({today})")
-    print("=" * 50)
+    print(f"\n📊 알고리즘 스터디 일일 리포트 ({today}) - 날짜: {today_folder}")
+    print("=" * 60)
 
     total_uploaded = 0
     total_members = len(MEMBERS)
@@ -137,9 +141,7 @@ def print_daily_report(upload_status):
             for file in status["files"]:
                 print(f"   📝 {file}")
 
-    print(
-        f"\n📈 전체 현황: {total_uploaded}/{total_members}명 참여 ({(total_uploaded/total_members)*100:.1f}%)"
-    )
+    print(f"\n📈 전체 현황: {total_uploaded}/{total_members}명 참여 ({(total_uploaded/total_members)*100:.1f}%)")
 
     # 아직 업로드하지 않은 멤버들
     not_uploaded = [
@@ -155,10 +157,12 @@ def print_daily_report(upload_status):
     else:
         print(f"\n🎉 모든 멤버가 오늘 문제를 업로드했습니다!")
 
+    print(f"\n💡 다음 단계: 일별 진행률 업데이트를 통해 {today_folder} 날짜의 진행률이 계산됩니다.")
 
 def save_daily_log(upload_status):
-    """일일 로그를 JSON 파일로 저장"""
+    """일일 로그를 JSON 파일로 저장 - 일별 진행률 연동"""
     today = datetime.now().strftime("%Y%m%d")
+    today_folder = get_today_folder()
     log_dir = "logs"
 
     # logs 디렉토리 생성
@@ -168,11 +172,12 @@ def save_daily_log(upload_status):
 
     log_data = {
         "date": today,
+        "target_date": today_folder,
         "upload_status": upload_status,
         "timestamp": datetime.now().isoformat(),
         "week_folder": get_current_week_folder(),
         "checked_paths": find_week_folders(),
-        "file_structure_type": "problem_folder_based",  # 새로운 구조 표시
+        "file_structure_type": "daily_tracking_with_progress",
     }
 
     log_file = f"{log_dir}/daily_log_{today}.json"
@@ -187,7 +192,7 @@ def save_daily_log(upload_status):
 
 
 if __name__ == "__main__":
-    print("🚀 일일 알고리즘 스터디 체크 시작! (문제별 폴더 구조)")
+    print("🚀 일일 알고리즘 스터디 체크 시작! (일별 진행률 연동)")
 
     try:
         upload_status = check_today_uploads()
@@ -195,9 +200,9 @@ if __name__ == "__main__":
         save_daily_log(upload_status)
 
         print("\n✅ 일일 체크 완료!")
+        print("📅 다음: update_daily_progress.py 실행으로 일별 진행률이 업데이트됩니다.")
 
     except Exception as e:
         print(f"❌ 오류 발생: {e}")
         import traceback
-
         traceback.print_exc()
