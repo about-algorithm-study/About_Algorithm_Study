@@ -1,0 +1,104 @@
+{
+  "date": "20250822",
+  "week_folder": "8월3주차",
+  "cumulative_daily_progress": {
+    "0820": {
+      "김강연": {
+        "solved": 3,
+        "total": 3,
+        "percentage": 100.0,
+        "status": "🔥"
+      },
+      "신재혁": {
+        "solved": 0,
+        "total": 3,
+        "percentage": 0.0,
+        "status": "📈"
+      },
+      "오창민": {
+        "solved": 2,
+        "total": 3,
+        "percentage": 66.7,
+        "status": "💪"
+      },
+      "송민경": {
+        "solved": 1,
+        "total": 3,
+        "percentage": 33.3,
+        "status": "📈"
+      },
+      "최재각": {
+        "solved": 2,
+        "total": 3,
+        "percentage": 66.7,
+        "status": "💪"
+      }
+    },
+    "0821": {
+      "김강연": {
+        "solved": 4,
+        "total": 6,
+        "percentage": 66.7,
+        "status": "💪"
+      },
+      "신재혁": {
+        "solved": 1,
+        "total": 6,
+        "percentage": 16.7,
+        "status": "📈"
+      },
+      "오창민": {
+        "solved": 2,
+        "total": 6,
+        "percentage": 33.3,
+        "status": "📈"
+      },
+      "송민경": {
+        "solved": 6,
+        "total": 6,
+        "percentage": 100.0,
+        "status": "🔥"
+      },
+      "최재각": {
+        "solved": 0,
+        "total": 6,
+        "percentage": 0.0,
+        "status": "📈"
+      }
+    },
+    "0822": {
+      "김강연": {
+        "solved": 0,
+        "total": 4,
+        "percentage": 0.0,
+        "status": "📈"
+      },
+      "신재혁": {
+        "solved": 0,
+        "total": 4,
+        "percentage": 0.0,
+        "status": "📈"
+      },
+      "오창민": {
+        "solved": 0,
+        "total": 4,
+        "percentage": 0.0,
+        "status": "📈"
+      },
+      "송민경": {
+        "solved": 1,
+        "total": 4,
+        "percentage": 25.0,
+        "status": "📈"
+      },
+      "최재각": {
+        "solved": 0,
+        "total": 4,
+        "percentage": 0.0,
+        "status": "📈"
+      }
+    }
+  },
+  "timestamp": "2025-08-22T04:23:06.008140",
+  "file_structure_type": "cumulative_daily_progress_tracking"
+}
