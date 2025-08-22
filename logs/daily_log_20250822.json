@@ -18,9 +18,11 @@
       "status": "❌"
     },
     "송민경": {
-      "uploaded_count": 0,
-      "files": [],
-      "status": "❌"
+      "uploaded_count": 1,
+      "files": [
+        "SWEA_18544/SWEA_18544_smk.py"
+      ],
+      "status": "✅"
     },
     "최재각": {
       "uploaded_count": 0,
@@ -28,7 +30,7 @@
       "status": "❌"
     }
   },
-  "timestamp": "2025-08-22T04:09:55.604731",
+  "timestamp": "2025-08-22T04:23:05.263167",
   "week_folder": "8월4주차",
   "checked_paths": [
     "8월3주차"
