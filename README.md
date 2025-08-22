@@ -250,7 +250,7 @@ git commit -m "solve: BOJ_27433_본인이니셜"
 
 #### Step 5: 업로드
 ```bash
-git push origin master
+git push origin feature/본인 이니셜
 ```
 
 ### 🚨 충돌 해결하기

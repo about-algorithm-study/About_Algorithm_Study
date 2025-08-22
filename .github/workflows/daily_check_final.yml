@@ -69,10 +69,11 @@ jobs:
         echo "📁 주차 폴더 구조:"
         ls -la "8월3주차/" 2>/dev/null || echo "8월3주차 폴더 없음"
         echo ""
-        echo "📅 날짜 폴더 구조:"
-        ls -la "8월3주차/0822/" 2>/dev/null || echo "0822 폴더 없음"
-        ls -la "8월3주차/0821/" 2>/dev/null || echo "0821 폴더 없음"
+        echo "📅 모든 날짜 폴더 구조:"
         ls -la "8월3주차/0820/" 2>/dev/null || echo "0820 폴더 없음"
+        ls -la "8월3주차/0821/" 2>/dev/null || echo "0821 폴더 없음"
+        ls -la "8월3주차/0822/" 2>/dev/null || echo "0822 폴더 없음"
+        ls -la "8월3주차/0823/" 2>/dev/null || echo "0823 폴더 없음"
         echo ""
         echo "🗂️ 문제 폴더들:"
         find "8월3주차/" -type d -name "BOJ_*" 2>/dev/null || echo "BOJ 문제 폴더 없음"
@@ -86,10 +87,10 @@ jobs:
         echo "🚀 일일 알고리즘 스터디 체크 시작!"
         python scripts/daily_check.py
         
-    - name: 📈 일별 진행률 업데이트
+    - name: 📈 누적 일별 진행률 업데이트
       run: |
-        echo "📅 일별 진행률 업데이트 시작!"
-        python scripts/update_daily_progress.py
+        echo "📅 누적 일별 진행률 업데이트 시작!"
+        python scripts/update_cumulative_daily_progress.py
         
     - name: 🔍 실행 후 상세 확인
       run: |
@@ -106,16 +107,15 @@ jobs:
           head -20 "logs/daily_log_${TODAY}.json"
         fi
         echo ""
-        TARGET_DATE=$(date +%m%d)
-        if [ -f "logs/daily_progress_${TARGET_DATE}_${TODAY}.json" ]; then
-          echo "=== 오늘의 일별 진행률 로그 ==="
-          head -20 "logs/daily_progress_${TARGET_DATE}_${TODAY}.json"
+        if [ -f "logs/cumulative_progress_${TODAY}.json" ]; then
+          echo "=== 오늘의 누적 진행률 로그 ==="
+          head -30 "logs/cumulative_progress_${TODAY}.json"
         fi
         echo ""
         echo "📄 README 파일 확인:"
         if [ -f "8월3주차/README.md" ]; then
-          echo "=== README 진행 현황 섹션 ==="
-          grep -A 15 "## 📊 진행 현황" "8월3주차/README.md" || echo "진행 현황 섹션 없음"
+          echo "=== README 진행 현황 섹션 미리보기 ==="
+          grep -A 30 "## 📊 진행 현황" "8월3주차/README.md" || echo "진행 현황 섹션 없음"
         fi
         
     - name: 💾 스마트 커밋 및 푸시 (개선된 충돌 방지)
@@ -170,13 +170,11 @@ jobs:
               }
             }
             
-            # 임시 커밃을 최종 커밋으로 수정
-            TARGET_DATE=$(date +%m%d)
-            git commit --amend -m "📅 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 일별 진행률 ($TARGET_DATE)"
+            # 임시 커밋을 최종 커밋으로 수정
+            git commit --amend -m "📅 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 누적 일별 진행률"
           else
             # 원격과 차이가 없으면 단순 커밋
-            TARGET_DATE=$(date +%m%d)
-            git commit -m "📅 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 일별 진행률 ($TARGET_DATE)"
+            git commit -m "📅 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 누적 일별 진행률"
           fi
           
           # 4단계: 푸시 재시도 로직 (개선됨)
@@ -227,8 +225,8 @@ jobs:
         echo "🏢 Organization: about-algorithm-study"
         echo "📈 스터디 멤버: 김강연, 신재혁, 오창민, 송민경, 최재각"
         echo "📁 파일 구조: 8월3주차/날짜/문제폴더/파일명.py"
-        echo "🤖 자동화: 일일 체크 + 일별 진행률 업데이트 + 스마트 충돌 해결"
-        echo "📅 일별 진행률: 매일 해당 날짜의 문제들에 대한 개별 진행률 계산"
+        echo "🤖 자동화: 일일 체크 + 누적 일별 진행률 업데이트 + 스마트 충돌 해결"
+        echo "📅 누적 진행률: 모든 날짜의 진행률을 README에 누적 표시"
         echo "🔗 결과 확인: https://github.com/about-algorithm-study/About_Algorithm_Study"
         echo ""
         echo "📋 최종 Git 상태:"
