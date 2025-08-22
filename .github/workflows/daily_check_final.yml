@@ -16,17 +16,36 @@ jobs:
       with:
         token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         fetch-depth: 0
-        # 최신 상태로 강제 동기화
         ref: master
       
-    - name: 🔄 최신 상태 확인 및 동기화
+    - name: 🔄 강제 동기화 (충돌 방지)
       env:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
-        echo "🔄 원격 저장소와 동기화 중..."
+        echo "🔄 원격 저장소와 강제 동기화 중..."
+        
+        # 현재 상태 확인
+        echo "📋 현재 Git 상태:"
+        git status
+        
+        # 로컬 변경사항이 있다면 임시 저장
+        if [[ -n $(git status --porcelain) ]]; then
+          echo "⚠️ 로컬 변경사항 발견 - 임시 저장"
+          git stash push -m "GitHub Actions 임시 저장 $(date)"
+        fi
+        
+        # 추적되지 않는 파일들 제거 (logs 폴더 등)
+        echo "🧹 추적되지 않는 파일들 정리..."
+        git clean -fd
+        
+        # 원격에서 최신 변경사항 가져오기
         git fetch origin master
+        
+        # 강제로 원격 상태와 동일하게 맞추기
         git reset --hard origin/master
-        echo "✅ 최신 상태로 동기화 완료"
+        
+        echo "✅ 강제 동기화 완료"
+        git status
         
     - name: 🐍 Python 설정
       uses: actions/setup-python@v4
@@ -51,9 +70,9 @@ jobs:
         ls -la "8월3주차/" 2>/dev/null || echo "8월3주차 폴더 없음"
         echo ""
         echo "📅 날짜 폴더 구조:"
+        ls -la "8월3주차/0822/" 2>/dev/null || echo "0822 폴더 없음"
         ls -la "8월3주차/0821/" 2>/dev/null || echo "0821 폴더 없음"
         ls -la "8월3주차/0820/" 2>/dev/null || echo "0820 폴더 없음"
-        ls -la "8월3주차/0822/" 2>/dev/null || echo "0822 폴더 없음"
         echo ""
         echo "🗂️ 문제 폴더들:"
         find "8월3주차/" -type d -name "BOJ_*" 2>/dev/null || echo "BOJ 문제 폴더 없음"
@@ -99,33 +118,69 @@ jobs:
           grep -A 15 "## 📊 진행 현황" "8월3주차/README.md" || echo "진행 현황 섹션 없음"
         fi
         
-    - name: 💾 변경사항 커밋 및 푸시 (충돌 방지 로직 추가)
+    - name: 💾 스마트 커밋 및 푸시 (개선된 충돌 방지)
       env:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
+        # 변경사항이 있는지 확인
         if [[ -n $(git status --porcelain) ]]; then
-          echo "📝 변경사항 발견 - 자동 커밋 진행"
+          echo "📝 변경사항 발견 - 스마트 커밋 진행"
           
-          # 다시 한번 최신 상태 확인
-          echo "🔄 푸시 전 최신 상태 재확인..."
+          # 변경사항 상세 확인
+          echo "📋 변경된 파일들:"
+          git status --porcelain
+          
+          # 1단계: 현재 변경사항 스테이징
+          git add .
+          
+          # 2단계: 원격 상태 재확인
+          echo "🔄 푸시 전 원격 상태 재확인..."
           git fetch origin master
           
-          # 원격과 차이가 있는지 확인
+          # 3단계: 원격과 차이가 있는지 확인
           if ! git diff --quiet HEAD origin/master; then
-            echo "⚠️ 원격에 새로운 변경사항 발견 - 병합 시도"
-            git pull --no-edit origin master || {
-              echo "❌ 자동 병합 실패 - 수동 처리 필요"
-              exit 1
+            echo "⚠️ 원격에 새로운 변경사항 발견 - 스마트 병합 시도"
+            
+            # 현재 변경사항을 임시 커밋
+            git commit -m "임시 커밋: $(date +'%Y-%m-%d %H:%M')"
+            
+            # 병합 전략: 우리의 변경사항 우선 (README는 우리가 생성한 것이므로)
+            git pull origin master --strategy=ours --no-edit || {
+              echo "❌ 스마트 병합 실패 - 수동 병합 시도"
+              
+              # 수동 병합: 충돌 파일들을 우리 버전으로 유지
+              git merge origin/master --strategy-option=ours --no-edit || {
+                echo "⚠️ 병합 충돌 발생 - 자동 해결 시도"
+                
+                # README.md 충돌 해결: 우리 버전 사용
+                if [ -f "8월3주차/README.md" ]; then
+                  git checkout --ours "8월3주차/README.md"
+                  git add "8월3주차/README.md"
+                  echo "✅ README.md 충돌 해결 (우리 버전 사용)"
+                fi
+                
+                # logs 폴더 충돌 해결: 우리 버전 사용
+                if [ -d "logs" ]; then
+                  git add logs/
+                  echo "✅ logs 폴더 충돌 해결 (우리 버전 사용)"
+                fi
+                
+                # 병합 완료
+                git commit --no-edit
+              }
             }
+            
+            # 임시 커밃을 최종 커밋으로 수정
+            TARGET_DATE=$(date +%m%d)
+            git commit --amend -m "📅 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 일별 진행률 ($TARGET_DATE)"
+          else
+            # 원격과 차이가 없으면 단순 커밋
+            TARGET_DATE=$(date +%m%d)
+            git commit -m "📅 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 일별 진행률 ($TARGET_DATE)"
           fi
           
-          # 변경사항 추가 및 커밋
-          git add .
-          TARGET_DATE=$(date +%m%d)
-          git commit -m "📅 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 일별 진행률 ($TARGET_DATE)"
-          
-          # 푸시 재시도 로직
-          MAX_RETRIES=3
+          # 4단계: 푸시 재시도 로직 (개선됨)
+          MAX_RETRIES=5
           RETRY_COUNT=0
           
           while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
@@ -140,15 +195,24 @@ jobs:
               
               if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
                 echo "🔄 최신 변경사항 다시 가져오기..."
+                
+                # 원격 변경사항 가져오기
                 git fetch origin master
-                git pull --no-edit origin master || {
-                  echo "❌ 병합 실패"
-                  exit 1
+                
+                # 리베이스 시도 (더 깔끔한 히스토리)
+                git rebase origin/master || {
+                  echo "⚠️ 리베이스 실패 - 병합으로 재시도"
+                  git rebase --abort
+                  git merge origin/master --strategy-option=ours --no-edit
                 }
-                echo "⏳ 3초 대기 후 재시도..."
-                sleep 3
+                
+                echo "⏳ $((3 * RETRY_COUNT))초 대기 후 재시도..."
+                sleep $((3 * RETRY_COUNT))
               else
-                echo "❌ 최대 재시도 횟수 초과 - 실패"
+                echo "❌ 최대 재시도 횟수 초과"
+                echo "📋 최종 상태:"
+                git status
+                git log --oneline -5
                 exit 1
               fi
             fi
@@ -163,6 +227,12 @@ jobs:
         echo "🏢 Organization: about-algorithm-study"
         echo "📈 스터디 멤버: 김강연, 신재혁, 오창민, 송민경, 최재각"
         echo "📁 파일 구조: 8월3주차/날짜/문제폴더/파일명.py"
-        echo "🤖 자동화: 일일 체크 + 일별 진행률 업데이트 + Organization 동기화"
+        echo "🤖 자동화: 일일 체크 + 일별 진행률 업데이트 + 스마트 충돌 해결"
         echo "📅 일별 진행률: 매일 해당 날짜의 문제들에 대한 개별 진행률 계산"
         echo "🔗 결과 확인: https://github.com/about-algorithm-study/About_Algorithm_Study"
+        echo ""
+        echo "📋 최종 Git 상태:"
+        git status
+        echo ""
+        echo "📜 최근 커밋:"
+        git log --oneline -3
