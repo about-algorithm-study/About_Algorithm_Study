@@ -1,0 +1,53 @@
+{
+  "date": "20250825",
+  "target_date": "0825",
+  "upload_status": {
+    "김강연": {
+      "uploaded_count": 5,
+      "files": [
+        "SWEA_1288/SWEA_1288_kky.py",
+        "SWEA_1861/SWEA_1861_kky.py",
+        "SWEA_1238/SWEA_1238_kky.py",
+        "SWEA_1284/SWEA_1284_kky.py",
+        "SWEA_2001/SWEA_2001_kky.py"
+      ],
+      "status": "✅"
+    },
+    "신재혁": {
+      "uploaded_count": 0,
+      "files": [],
+      "status": "❌"
+    },
+    "오창민": {
+      "uploaded_count": 1,
+      "files": [
+        "SWEA_2001/SWEA_2001_ocm.py"
+      ],
+      "status": "✅"
+    },
+    "송민경": {
+      "uploaded_count": 4,
+      "files": [
+        "SWEA_1288/SWEA_1288_smk.py",
+        "SWEA_1238/SWEA_1238_smk.py",
+        "SWEA_1284/SWEA_1284_smk.py",
+        "SWEA_2001/SWEA_2001_smk.py"
+      ],
+      "status": "✅"
+    },
+    "최재각": {
+      "uploaded_count": 1,
+      "files": [
+        "SWEA_2001/SWEA_2001_cjg.py"
+      ],
+      "status": "✅"
+    }
+  },
+  "timestamp": "2025-08-25T15:20:17.746260",
+  "week_folder": "8월4주차",
+  "checked_paths": [
+    "8월3주차",
+    "8월4주차"
+  ],
+  "file_structure_type": "daily_tracking_with_progress"
+}
