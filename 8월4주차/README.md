@@ -16,7 +16,6 @@
 | 2001 | 파리 퇴치 | D2 | 완전탐색 | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV5PzOCKAigDFAUq) |
 | 1288 | 새로운 불면증 치료법 | D2 | 구현 | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV18_yw6I9MCFAZN) |
 | 1284 | 수도 요금 경쟁 | D2 | 구현 | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV189xUaI8UCFAZN) |
-| 1285 | 아름이의 돌 던지기 | D2 | 구현 | [링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV18-stqI8oCFAZN) |
 
 ### 8월 26일 (화)
 | 번호 | 문제명 | 난이도 | 분류 | 링크 |
