@@ -1,5 +1,5 @@
 {
-  "date": "20250822",
+  "date": "20250823",
   "week_folder": "8월3주차",
   "cumulative_daily_progress": {
     "0820": {
@@ -80,10 +80,10 @@
         "status": "📈"
       },
       "오창민": {
-        "solved": 0,
+        "solved": 2,
         "total": 4,
-        "percentage": 0.0,
-        "status": "📈"
+        "percentage": 50.0,
+        "status": "💪"
       },
       "송민경": {
         "solved": 1,
@@ -99,6 +99,6 @@
       }
     }
   },
-  "timestamp": "2025-08-22T15:19:06.193130",
+  "timestamp": "2025-08-23T15:16:30.829268",
   "file_structure_type": "cumulative_daily_progress_tracking"
 }
