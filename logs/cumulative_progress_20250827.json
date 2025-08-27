@@ -16,9 +16,9 @@
         "status": "📈"
       },
       "오창민": {
-        "solved": 1,
+        "solved": 2,
         "total": 5,
-        "percentage": 20.0,
+        "percentage": 40.0,
         "status": "📈"
       },
       "송민경": {
@@ -48,9 +48,9 @@
         "status": "📈"
       },
       "오창민": {
-        "solved": 0,
+        "solved": 1,
         "total": 6,
-        "percentage": 0.0,
+        "percentage": 16.7,
         "status": "📈"
       },
       "송민경": {
@@ -68,10 +68,10 @@
     },
     "0827": {
       "김강연": {
-        "solved": 0,
+        "solved": 3,
         "total": 6,
-        "percentage": 0.0,
-        "status": "📈"
+        "percentage": 50.0,
+        "status": "💪"
       },
       "신재혁": {
         "solved": 0,
@@ -163,6 +163,6 @@
       }
     }
   },
-  "timestamp": "2025-08-27T12:36:32.757310",
+  "timestamp": "2025-08-27T15:19:30.380919",
   "file_structure_type": "cumulative_daily_progress_tracking"
 }

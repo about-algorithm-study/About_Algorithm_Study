@@ -3,9 +3,13 @@
   "target_date": "0827",
   "upload_status": {
     "김강연": {
-      "uploaded_count": 0,
-      "files": [],
-      "status": "❌"
+      "uploaded_count": 3,
+      "files": [
+        "SWEA_1976/SWEA_1976_kky.py",
+        "SWEA_1970/SWEA_1970_kky.py",
+        "SWEA_5215/SWEA_5215_kky.py"
+      ],
+      "status": "✅"
     },
     "신재혁": {
       "uploaded_count": 0,
@@ -28,7 +32,7 @@
       "status": "❌"
     }
   },
-  "timestamp": "2025-08-27T12:36:32.717092",
+  "timestamp": "2025-08-27T15:19:30.338017",
   "week_folder": "8월4주차",
   "checked_paths": [
     "8월3주차",
