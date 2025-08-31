@@ -1,0 +1,50 @@
+{
+  "date": "20250831",
+  "target_date": "0831",
+  "upload_status": {
+    "김강연": {
+      "uploaded_count": 3,
+      "files": [
+        "BOJ_25501/BOJ_25501_김강연.py",
+        "BOJ_27433/BOJ_27433_김강연.py",
+        "BOJ_10870/BOJ_10870_김강연.py"
+      ],
+      "status": "✅"
+    },
+    "신재혁": {
+      "uploaded_count": 0,
+      "files": [],
+      "status": "❌"
+    },
+    "오창민": {
+      "uploaded_count": 2,
+      "files": [
+        "BOJ_27433/BOJ_27433_오창민.py",
+        "BOJ_10870/BOJ_10870_오창민.py"
+      ],
+      "status": "✅"
+    },
+    "송민경": {
+      "uploaded_count": 1,
+      "files": [
+        "BOJ_10870/BOJ_10870_송민경.py"
+      ],
+      "status": "✅"
+    },
+    "최재각": {
+      "uploaded_count": 2,
+      "files": [
+        "BOJ_27433/BOJ_27433_최재각.py",
+        "BOJ_10870/BOJ_10870_최재각.py"
+      ],
+      "status": "✅"
+    }
+  },
+  "timestamp": "2025-08-31T15:16:33.468348",
+  "week_folder": "8월5주차",
+  "checked_paths": [
+    "8월3주차",
+    "8월4주차"
+  ],
+  "file_structure_type": "daily_tracking_with_progress"
+}
