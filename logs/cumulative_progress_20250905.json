@@ -28,40 +28,40 @@
         "status": "📈"
       },
       "최재각": {
-        "solved": 0,
+        "solved": 5,
         "total": 6,
-        "percentage": 0.0,
-        "status": "📈"
+        "percentage": 83.3,
+        "status": "⚡"
       }
     },
     "0902": {
       "김강연": {
         "solved": 0,
-        "total": 0,
+        "total": 5,
         "percentage": 0.0,
         "status": "📈"
       },
       "신재혁": {
         "solved": 0,
-        "total": 0,
+        "total": 5,
         "percentage": 0.0,
         "status": "📈"
       },
       "오창민": {
         "solved": 0,
-        "total": 0,
+        "total": 5,
         "percentage": 0.0,
         "status": "📈"
       },
       "송민경": {
         "solved": 0,
-        "total": 0,
+        "total": 5,
         "percentage": 0.0,
         "status": "📈"
       },
       "최재각": {
         "solved": 0,
-        "total": 0,
+        "total": 5,
         "percentage": 0.0,
         "status": "📈"
       }
@@ -69,31 +69,31 @@
     "0903": {
       "김강연": {
         "solved": 0,
-        "total": 0,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       },
       "신재혁": {
         "solved": 0,
-        "total": 0,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       },
       "오창민": {
         "solved": 0,
-        "total": 0,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       },
       "송민경": {
         "solved": 0,
-        "total": 0,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       },
       "최재각": {
         "solved": 0,
-        "total": 0,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       }
@@ -101,68 +101,68 @@
     "0904": {
       "김강연": {
         "solved": 0,
-        "total": 1,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       },
       "신재혁": {
         "solved": 0,
-        "total": 1,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       },
       "오창민": {
         "solved": 0,
-        "total": 1,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       },
       "송민경": {
         "solved": 0,
-        "total": 1,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       },
       "최재각": {
         "solved": 1,
-        "total": 1,
-        "percentage": 100.0,
-        "status": "🔥"
+        "total": 6,
+        "percentage": 16.7,
+        "status": "📈"
       }
     },
     "0905": {
       "김강연": {
         "solved": 0,
-        "total": 0,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       },
       "신재혁": {
         "solved": 0,
-        "total": 0,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       },
       "오창민": {
         "solved": 0,
-        "total": 0,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       },
       "송민경": {
         "solved": 0,
-        "total": 0,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       },
       "최재각": {
         "solved": 0,
-        "total": 0,
+        "total": 6,
         "percentage": 0.0,
         "status": "📈"
       }
     }
   },
-  "timestamp": "2025-09-05T00:11:20.449409",
+  "timestamp": "2025-09-05T00:21:40.875361",
   "file_structure_type": "cumulative_daily_progress_tracking"
 }
