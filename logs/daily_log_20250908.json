@@ -25,13 +25,14 @@
       "status": "✅"
     },
     "송민경": {
-      "uploaded_count": 5,
+      "uploaded_count": 6,
       "files": [
         "SWEA_5203/SWEA_5203_smk.py",
         "SWEA_5201/SWEA_5201_smk.py",
         "SWEA_4012/SWEA_4012_smk.py",
         "SWEA_4837/SWEA_4837_smk.py",
-        "SWEA_5202/SWEA_5202_smk.py"
+        "SWEA_5202/SWEA_5202_smk.py",
+        "SWEA_2817/SWEA_2817_smk.py"
       ],
       "status": "✅"
     },
@@ -45,7 +46,7 @@
       "status": "✅"
     }
   },
-  "timestamp": "2025-09-08T12:38:27.301202",
+  "timestamp": "2025-09-08T12:42:27.236359",
   "week_folder": "9월2주차",
   "checked_paths": [
     "9월1주차",
