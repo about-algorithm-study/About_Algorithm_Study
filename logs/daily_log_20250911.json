@@ -1,0 +1,44 @@
+{
+  "date": "20250911",
+  "target_date": "0911",
+  "upload_status": {
+    "김강연": {
+      "uploaded_count": 2,
+      "files": [
+        "SWEA_5208/SWEA_5208_kky.py",
+        "SWEA_5209/SWEA_5209_kky.py"
+      ],
+      "status": "✅"
+    },
+    "신재혁": {
+      "uploaded_count": 0,
+      "files": [],
+      "status": "❌"
+    },
+    "오창민": {
+      "uploaded_count": 0,
+      "files": [],
+      "status": "❌"
+    },
+    "송민경": {
+      "uploaded_count": 0,
+      "files": [],
+      "status": "❌"
+    },
+    "최재각": {
+      "uploaded_count": 2,
+      "files": [
+        "SWEA_5208/SWEA_5208_cjg.py",
+        "SWEA_5209/SWEA_5209_cjg.py"
+      ],
+      "status": "✅"
+    }
+  },
+  "timestamp": "2025-09-11T15:17:34.387941",
+  "week_folder": "9월2주차",
+  "checked_paths": [
+    "9월1주차",
+    "9월2주차"
+  ],
+  "file_structure_type": "daily_tracking_with_progress"
+}
