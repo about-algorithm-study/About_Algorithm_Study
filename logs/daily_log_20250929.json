@@ -1,0 +1,39 @@
+{
+  "date": "20250929",
+  "target_date": "0929",
+  "upload_status": {
+    "김강연": {
+      "uploaded_count": 0,
+      "files": [],
+      "status": "❌"
+    },
+    "신재혁": {
+      "uploaded_count": 0,
+      "files": [],
+      "status": "❌"
+    },
+    "오창민": {
+      "uploaded_count": 0,
+      "files": [],
+      "status": "❌"
+    },
+    "송민경": {
+      "uploaded_count": 0,
+      "files": [],
+      "status": "❌"
+    },
+    "최재각": {
+      "uploaded_count": 0,
+      "files": [],
+      "status": "❌"
+    }
+  },
+  "timestamp": "2025-09-29T15:18:53.797432",
+  "week_folder": "9월5주차",
+  "checked_paths": [
+    "9월1주차",
+    "9월2주차",
+    "9월3주차"
+  ],
+  "file_structure_type": "daily_tracking_with_progress"
+}
