@@ -1,13 +1,13 @@
-# .github/workflows/daily_check_final.yml
-name: 📊 Daily Check (Organization)
+# .github/workflows/weekly_check.yml
+name: 📊 Weekly Check (Organization)
 
 on:
   workflow_dispatch:  # 수동 실행
   schedule:
-    - cron: '0 15 * * *'  # 매일 한국시간 오후 12시 (UTC 15시)
+    - cron: '0 15 * * 0'  # 매주 일요일 한국시간 자정 (UTC 15시)
     
 jobs:
-  check-daily-progress:
+  check-weekly-progress:
     runs-on: ubuntu-latest
     
     steps:
@@ -24,24 +24,18 @@ jobs:
       run: |
         echo "🔄 원격 저장소와 강제 동기화 중..."
         
-        # 현재 상태 확인
         echo "📋 현재 Git 상태:"
         git status
         
-        # 로컬 변경사항이 있다면 임시 저장
         if [[ -n $(git status --porcelain) ]]; then
           echo "⚠️ 로컬 변경사항 발견 - 임시 저장"
           git stash push -m "GitHub Actions 임시 저장 $(date)"
         fi
         
-        # 추적되지 않는 파일들 제거 (logs 폴더 등)
         echo "🧹 추적되지 않는 파일들 정리..."
         git clean -fd
         
-        # 원격에서 최신 변경사항 가져오기
         git fetch origin master
-        
-        # 강제로 원격 상태와 동일하게 맞추기
         git reset --hard origin/master
         
         echo "✅ 강제 동기화 완료"
@@ -68,29 +62,25 @@ jobs:
         echo ""
         echo "📁 주차 폴더 구조:"
         ls -la "8월3주차/" 2>/dev/null || echo "8월3주차 폴더 없음"
+        ls -la "9월1주차/" 2>/dev/null || echo "9월1주차 폴더 없음"
         echo ""
-        echo "📅 모든 날짜 폴더 구조:"
-        ls -la "8월3주차/0820/" 2>/dev/null || echo "0820 폴더 없음"
-        ls -la "8월3주차/0821/" 2>/dev/null || echo "0821 폴더 없음"
-        ls -la "8월3주차/0822/" 2>/dev/null || echo "0822 폴더 없음"
-        ls -la "8월3주차/0823/" 2>/dev/null || echo "0823 폴더 없음"
-        echo ""
-        echo "🗂️ 문제 폴더들:"
-        find "8월3주차/" -type d -name "BOJ_*" 2>/dev/null || echo "BOJ 문제 폴더 없음"
-        find "8월3주차/" -type d -name "SWEA_*" 2>/dev/null || echo "SWEA 문제 폴더 없음"
+        echo "🗂️ 문제 폴더들 (주차별):"
+        find . -type d -name "BOJ_*" -maxdepth 2 2>/dev/null || echo "BOJ 문제 폴더 없음"
+        find . -type d -name "SWEA_*" -maxdepth 2 2>/dev/null || echo "SWEA 문제 폴더 없음"
+        find . -type d -name "PRO_*" -maxdepth 2 2>/dev/null || echo "PRO 문제 폴더 없음"
         echo ""
         echo "📝 Python 파일들:"
-        find "8월3주차/" -name "*.py" 2>/dev/null || echo "Python 파일 없음"
+        find . -name "*.py" -maxdepth 3 2>/dev/null || echo "Python 파일 없음"
         
-    - name: 📊 일일 진행상황 체크
+    - name: 📊 주간 진행상황 체크
       run: |
-        echo "🚀 일일 알고리즘 스터디 체크 시작!"
-        python scripts/daily_check.py
+        echo "🚀 주간 알고리즘 스터디 체크 시작!"
+        python scripts/weekly_check.py
         
-    - name: 📈 누적 일별 진행률 업데이트
+    - name: 📈 주간 진행률 업데이트
       run: |
-        echo "📅 누적 일별 진행률 업데이트 시작!"
-        python scripts/update_cumulative_daily_progress.py
+        echo "📅 주간 진행률 업데이트 시작!"
+        python scripts/update_weekly_progress.py
         
     - name: 🔍 실행 후 상세 확인
       run: |
@@ -101,83 +91,71 @@ jobs:
         ls -la logs/ 2>/dev/null || echo "로그 폴더 없음"
         echo ""
         echo "📋 로그 내용 미리보기:"
-        TODAY=$(date +%Y%m%d)
-        if [ -f "logs/daily_log_${TODAY}.json" ]; then
-          echo "=== 오늘의 일일 로그 ==="
-          head -20 "logs/daily_log_${TODAY}.json"
+        WEEK=$(date +%Y_W%V)
+        if [ -f "logs/weekly_log_${WEEK}.json" ]; then
+          echo "=== 이번 주 로그 ==="
+          head -20 "logs/weekly_log_${WEEK}.json"
         fi
         echo ""
-        if [ -f "logs/cumulative_progress_${TODAY}.json" ]; then
-          echo "=== 오늘의 누적 진행률 로그 ==="
-          head -30 "logs/cumulative_progress_${TODAY}.json"
+        if [ -f "logs/weekly_progress_${WEEK}.json" ]; then
+          echo "=== 이번 주 진행률 로그 ==="
+          head -30 "logs/weekly_progress_${WEEK}.json"
         fi
         echo ""
         echo "📄 README 파일 확인:"
-        if [ -f "8월3주차/README.md" ]; then
+        CURRENT_WEEK_FOLDER=$(ls -d *주차 2>/dev/null | tail -1)
+        if [ -f "${CURRENT_WEEK_FOLDER}/README.md" ]; then
           echo "=== README 진행 현황 섹션 미리보기 ==="
-          grep -A 30 "## 📊 진행 현황" "8월3주차/README.md" || echo "진행 현황 섹션 없음"
+          grep -A 30 "## 📊 진행 현황" "${CURRENT_WEEK_FOLDER}/README.md" || echo "진행 현황 섹션 없음"
         fi
         
     - name: 💾 스마트 커밋 및 푸시 (개선된 충돌 방지)
       env:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
-        # 변경사항이 있는지 확인
         if [[ -n $(git status --porcelain) ]]; then
           echo "📝 변경사항 발견 - 스마트 커밋 진행"
           
-          # 변경사항 상세 확인
           echo "📋 변경된 파일들:"
           git status --porcelain
           
-          # 1단계: 현재 변경사항 스테이징
           git add .
           
-          # 2단계: 원격 상태 재확인
           echo "🔄 푸시 전 원격 상태 재확인..."
           git fetch origin master
           
-          # 3단계: 원격과 차이가 있는지 확인
           if ! git diff --quiet HEAD origin/master; then
             echo "⚠️ 원격에 새로운 변경사항 발견 - 스마트 병합 시도"
             
-            # 현재 변경사항을 임시 커밋
             git commit -m "임시 커밋: $(date +'%Y-%m-%d %H:%M')"
             
-            # 병합 전략: 우리의 변경사항 우선 (README는 우리가 생성한 것이므로)
             git pull origin master --strategy=ours --no-edit || {
               echo "❌ 스마트 병합 실패 - 수동 병합 시도"
               
-              # 수동 병합: 충돌 파일들을 우리 버전으로 유지
               git merge origin/master --strategy-option=ours --no-edit || {
                 echo "⚠️ 병합 충돌 발생 - 자동 해결 시도"
                 
-                # README.md 충돌 해결: 우리 버전 사용
-                if [ -f "8월3주차/README.md" ]; then
-                  git checkout --ours "8월3주차/README.md"
-                  git add "8월3주차/README.md"
+                CURRENT_WEEK_FOLDER=$(ls -d *주차 2>/dev/null | tail -1)
+                if [ -f "${CURRENT_WEEK_FOLDER}/README.md" ]; then
+                  git checkout --ours "${CURRENT_WEEK_FOLDER}/README.md"
+                  git add "${CURRENT_WEEK_FOLDER}/README.md"
                   echo "✅ README.md 충돌 해결 (우리 버전 사용)"
                 fi
                 
-                # logs 폴더 충돌 해결: 우리 버전 사용
                 if [ -d "logs" ]; then
                   git add logs/
                   echo "✅ logs 폴더 충돌 해결 (우리 버전 사용)"
                 fi
                 
-                # 병합 완료
                 git commit --no-edit
               }
             }
             
-            # 임시 커밋을 최종 커밋으로 수정
-            git commit --amend -m "📅 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 누적 일별 진행률"
+            git commit --amend -m "📅 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 주간 진행률"
           else
-            # 원격과 차이가 없으면 단순 커밋
-            git commit -m "📅 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 누적 일별 진행률"
+            git commit -m "📅 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 주간 진행률"
           fi
           
-          # 4단계: 푸시 재시도 로직 (개선됨)
           MAX_RETRIES=5
           RETRY_COUNT=0
           
@@ -194,10 +172,8 @@ jobs:
               if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
                 echo "🔄 최신 변경사항 다시 가져오기..."
                 
-                # 원격 변경사항 가져오기
                 git fetch origin master
                 
-                # 리베이스 시도 (더 깔끔한 히스토리)
                 git rebase origin/master || {
                   echo "⚠️ 리베이스 실패 - 병합으로 재시도"
                   git rebase --abort
@@ -224,9 +200,9 @@ jobs:
         echo "🎉 GitHub Actions 실행 완료!"
         echo "🏢 Organization: about-algorithm-study"
         echo "📈 스터디 멤버: 김강연, 신재혁, 오창민, 송민경, 최재각"
-        echo "📁 파일 구조: 8월3주차/날짜/문제폴더/파일명.py"
-        echo "🤖 자동화: 일일 체크 + 누적 일별 진행률 업데이트 + 스마트 충돌 해결"
-        echo "📅 누적 진행률: 모든 날짜의 진행률을 README에 누적 표시"
+        echo "📁 파일 구조: 주차폴더/문제폴더/파일명.py"
+        echo "🤖 자동화: 주간 체크 + 주간 진행률 업데이트 + 스마트 충돌 해결"
+        echo "📅 주간 진행률: 1주일에 9문제 진행 상황 추적"
         echo "🔗 결과 확인: https://github.com/about-algorithm-study/About_Algorithm_Study"
         echo ""
         echo "📋 최종 Git 상태:"
