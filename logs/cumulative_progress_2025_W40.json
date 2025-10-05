@@ -1,12 +1,38 @@
 {
-  "timestamp": "2025-09-30T11:55:03.889632",
+  "timestamp": "2025-10-05T15:08:29.771403",
   "week_number": "2025_W40",
   "summary": {
-    "total_weeks": 5,
-    "total_problems": 45,
+    "total_weeks": 6,
+    "total_problems": 54,
     "weekly_target": 9
   },
   "weeks": [
+    {
+      "name": "10월1주차",
+      "total_problems": 0,
+      "members": {
+        "kky": {
+          "solved": 0,
+          "problems": []
+        },
+        "sjh": {
+          "solved": 0,
+          "problems": []
+        },
+        "ocm": {
+          "solved": 0,
+          "problems": []
+        },
+        "smk": {
+          "solved": 0,
+          "problems": []
+        },
+        "cjg": {
+          "solved": 0,
+          "problems": []
+        }
+      }
+    },
     {
       "name": "8월3주차",
       "total_problems": 0,
@@ -143,6 +169,7 @@
       "name": "김강연",
       "total_solved": 0,
       "by_week": {
+        "10월1주차": 0,
         "8월3주차": 0,
         "8월4주차": 0,
         "9월1주차": 0,
@@ -156,6 +183,7 @@
       "name": "신재혁",
       "total_solved": 0,
       "by_week": {
+        "10월1주차": 0,
         "8월3주차": 0,
         "8월4주차": 0,
         "9월1주차": 0,
@@ -169,6 +197,7 @@
       "name": "오창민",
       "total_solved": 0,
       "by_week": {
+        "10월1주차": 0,
         "8월3주차": 0,
         "8월4주차": 0,
         "9월1주차": 0,
@@ -182,6 +211,7 @@
       "name": "송민경",
       "total_solved": 0,
       "by_week": {
+        "10월1주차": 0,
         "8월3주차": 0,
         "8월4주차": 0,
         "9월1주차": 0,
@@ -195,6 +225,7 @@
       "name": "최재각",
       "total_solved": 0,
       "by_week": {
+        "10월1주차": 0,
         "8월3주차": 0,
         "8월4주차": 0,
         "9월1주차": 0,
