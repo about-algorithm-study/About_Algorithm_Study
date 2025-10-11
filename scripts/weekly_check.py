@@ -29,15 +29,18 @@ WEEKLY_TARGET = 9
 def get_current_week_folder():
     """현재 작업중인 주차 폴더 찾기"""
     base_path = Path('.')
-    week_folders = sorted([f for f in base_path.iterdir() 
-                          if f.is_dir() and '주차' in f.name])
-    
+    week_folders = [f for f in base_path.iterdir()
+                   if f.is_dir() and '주차' in f.name]
+
     if not week_folders:
         print("⚠️ 주차 폴더를 찾을 수 없습니다.")
         return None
-    
+
+    # 폴더의 수정 시간 기준으로 정렬 (가장 최근에 수정된 폴더)
+    week_folders_sorted = sorted(week_folders, key=lambda f: f.stat().st_mtime)
+
     # 가장 최근 주차 폴더 반환
-    current_week = week_folders[-1]
+    current_week = week_folders_sorted[-1]
     print(f"📁 현재 주차: {current_week.name}")
     return current_week
 
