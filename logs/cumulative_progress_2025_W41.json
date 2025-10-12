@@ -1,0 +1,246 @@
+{
+  "timestamp": "2025-10-12T15:08:34.615929",
+  "week_number": "2025_W41",
+  "summary": {
+    "total_weeks": 6,
+    "total_problems": 54,
+    "weekly_target": 9
+  },
+  "weeks": [
+    {
+      "name": "10월1주차",
+      "total_problems": 4,
+      "members": {
+        "kky": {
+          "solved": 0,
+          "problems": []
+        },
+        "sjh": {
+          "solved": 2,
+          "problems": [
+            "SWEA_1285",
+            "SWEA_1966"
+          ]
+        },
+        "ocm": {
+          "solved": 0,
+          "problems": []
+        },
+        "smk": {
+          "solved": 0,
+          "problems": []
+        },
+        "cjg": {
+          "solved": 3,
+          "problems": [
+            "SWEA_1926",
+            "SWEA_1945",
+            "SWEA_1966"
+          ]
+        }
+      }
+    },
+    {
+      "name": "8월3주차",
+      "total_problems": 0,
+      "members": {
+        "kky": {
+          "solved": 0,
+          "problems": []
+        },
+        "sjh": {
+          "solved": 0,
+          "problems": []
+        },
+        "ocm": {
+          "solved": 0,
+          "problems": []
+        },
+        "smk": {
+          "solved": 0,
+          "problems": []
+        },
+        "cjg": {
+          "solved": 0,
+          "problems": []
+        }
+      }
+    },
+    {
+      "name": "8월4주차",
+      "total_problems": 0,
+      "members": {
+        "kky": {
+          "solved": 0,
+          "problems": []
+        },
+        "sjh": {
+          "solved": 0,
+          "problems": []
+        },
+        "ocm": {
+          "solved": 0,
+          "problems": []
+        },
+        "smk": {
+          "solved": 0,
+          "problems": []
+        },
+        "cjg": {
+          "solved": 0,
+          "problems": []
+        }
+      }
+    },
+    {
+      "name": "9월1주차",
+      "total_problems": 0,
+      "members": {
+        "kky": {
+          "solved": 0,
+          "problems": []
+        },
+        "sjh": {
+          "solved": 0,
+          "problems": []
+        },
+        "ocm": {
+          "solved": 0,
+          "problems": []
+        },
+        "smk": {
+          "solved": 0,
+          "problems": []
+        },
+        "cjg": {
+          "solved": 0,
+          "problems": []
+        }
+      }
+    },
+    {
+      "name": "9월2주차",
+      "total_problems": 0,
+      "members": {
+        "kky": {
+          "solved": 0,
+          "problems": []
+        },
+        "sjh": {
+          "solved": 0,
+          "problems": []
+        },
+        "ocm": {
+          "solved": 0,
+          "problems": []
+        },
+        "smk": {
+          "solved": 0,
+          "problems": []
+        },
+        "cjg": {
+          "solved": 0,
+          "problems": []
+        }
+      }
+    },
+    {
+      "name": "9월3주차",
+      "total_problems": 0,
+      "members": {
+        "kky": {
+          "solved": 0,
+          "problems": []
+        },
+        "sjh": {
+          "solved": 0,
+          "problems": []
+        },
+        "ocm": {
+          "solved": 0,
+          "problems": []
+        },
+        "smk": {
+          "solved": 0,
+          "problems": []
+        },
+        "cjg": {
+          "solved": 0,
+          "problems": []
+        }
+      }
+    }
+  ],
+  "cumulative_stats": {
+    "kky": {
+      "name": "김강연",
+      "total_solved": 0,
+      "by_week": {
+        "10월1주차": 0,
+        "8월3주차": 0,
+        "8월4주차": 0,
+        "9월1주차": 0,
+        "9월2주차": 0,
+        "9월3주차": 0
+      },
+      "participation_rate": 0.0,
+      "average_per_week": 0.0
+    },
+    "sjh": {
+      "name": "신재혁",
+      "total_solved": 2,
+      "by_week": {
+        "10월1주차": 2,
+        "8월3주차": 0,
+        "8월4주차": 0,
+        "9월1주차": 0,
+        "9월2주차": 0,
+        "9월3주차": 0
+      },
+      "participation_rate": 3.7,
+      "average_per_week": 0.33
+    },
+    "ocm": {
+      "name": "오창민",
+      "total_solved": 0,
+      "by_week": {
+        "10월1주차": 0,
+        "8월3주차": 0,
+        "8월4주차": 0,
+        "9월1주차": 0,
+        "9월2주차": 0,
+        "9월3주차": 0
+      },
+      "participation_rate": 0.0,
+      "average_per_week": 0.0
+    },
+    "smk": {
+      "name": "송민경",
+      "total_solved": 0,
+      "by_week": {
+        "10월1주차": 0,
+        "8월3주차": 0,
+        "8월4주차": 0,
+        "9월1주차": 0,
+        "9월2주차": 0,
+        "9월3주차": 0
+      },
+      "participation_rate": 0.0,
+      "average_per_week": 0.0
+    },
+    "cjg": {
+      "name": "최재각",
+      "total_solved": 3,
+      "by_week": {
+        "10월1주차": 3,
+        "8월3주차": 0,
+        "8월4주차": 0,
+        "9월1주차": 0,
+        "9월2주차": 0,
+        "9월3주차": 0
+      },
+      "participation_rate": 5.6,
+      "average_per_week": 0.5
+    }
+  }
+}

@@ -1,40 +1,10 @@
 {
-  "timestamp": "2025-10-12T00:03:35.034204",
-  "week": "10월1주차",
+  "timestamp": "2025-10-12T15:08:34.564349",
+  "week": "9월2주차",
   "week_number": "2025_W41",
-  "total_problems": 6,
+  "total_problems": 0,
   "target_problems": 9,
-  "problems": [
-    {
-      "name": "SWEA_1204",
-      "solved_by": []
-    },
-    {
-      "name": "SWEA_1217",
-      "solved_by": []
-    },
-    {
-      "name": "SWEA_1285",
-      "solved_by": [
-        "sjh"
-      ]
-    },
-    {
-      "name": "SWEA_1926",
-      "solved_by": []
-    },
-    {
-      "name": "SWEA_1945",
-      "solved_by": []
-    },
-    {
-      "name": "SWEA_1966",
-      "solved_by": [
-        "sjh",
-        "cjg"
-      ]
-    }
-  ],
+  "problems": [],
   "members": {
     "kky": {
       "name": "김강연",
@@ -44,12 +14,9 @@
     },
     "sjh": {
       "name": "신재혁",
-      "solved": 2,
-      "problems": [
-        "SWEA_1285",
-        "SWEA_1966"
-      ],
-      "percentage": 22.2
+      "solved": 0,
+      "problems": [],
+      "percentage": 0.0
     },
     "ocm": {
       "name": "오창민",
@@ -65,11 +32,9 @@
     },
     "cjg": {
       "name": "최재각",
-      "solved": 1,
-      "problems": [
-        "SWEA_1966"
-      ],
-      "percentage": 11.1
+      "solved": 0,
+      "problems": [],
+      "percentage": 0.0
     }
   }
 }
