@@ -1,0 +1,31 @@
+name: Debug Check
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Check directory structure
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Files in root:"
+          ls -la
+          echo "Looking for README files:"
+          find . -name "README.md"
+          echo "Check 8월3주차 folder:"
+          ls -la "8월3주차/" || echo "No 8월3주차 folder"
+          
+      - name: Check if README exists
+        run: |
+          if [ -f "8월3주차/README.md" ]; then
+            echo "README exists"
+            cat "8월3주차/README.md"
+          else
+            echo "README does not exist"
+          fi
