@@ -1,0 +1,212 @@
+# .github/workflows/weekly_check.yml
+name: 📊 Weekly Check (Organization)
+
+on:
+  workflow_dispatch:  # 수동 실행
+  schedule:
+    - cron: '0 15 * * 0'  # 매주 일요일 한국시간 자정 (UTC 15시)
+    
+jobs:
+  check-weekly-progress:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 체크아웃
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        fetch-depth: 0
+        ref: master
+      
+    - name: 🔄 강제 동기화 (충돌 방지)
+      env:
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      run: |
+        echo "🔄 원격 저장소와 강제 동기화 중..."
+        
+        echo "📋 현재 Git 상태:"
+        git status
+        
+        if [[ -n $(git status --porcelain) ]]; then
+          echo "⚠️ 로컬 변경사항 발견 - 임시 저장"
+          git stash push -m "GitHub Actions 임시 저장 $(date)"
+        fi
+        
+        echo "🧹 추적되지 않는 파일들 정리..."
+        git clean -fd
+        
+        git fetch origin master
+        git reset --hard origin/master
+        
+        echo "✅ 강제 동기화 완료"
+        git status
+        
+    - name: 🐍 Python 설정
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: 🔧 Git 설정
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+    - name: 🔍 환경 및 구조 확인
+      run: |
+        echo "📂 현재 디렉토리: $(pwd)"
+        echo "📁 루트 파일 목록:"
+        ls -la
+        echo ""
+        echo "📄 README 파일들:"
+        find . -name "README.md" 2>/dev/null || echo "README 파일 없음"
+        echo ""
+        echo "📁 주차 폴더 구조:"
+        ls -la "8월3주차/" 2>/dev/null || echo "8월3주차 폴더 없음"
+        ls -la "9월1주차/" 2>/dev/null || echo "9월1주차 폴더 없음"
+        echo ""
+        echo "🗂️ 문제 폴더들 (주차별):"
+        find . -type d -name "BOJ_*" -maxdepth 2 2>/dev/null || echo "BOJ 문제 폴더 없음"
+        find . -type d -name "SWEA_*" -maxdepth 2 2>/dev/null || echo "SWEA 문제 폴더 없음"
+        find . -type d -name "PRO_*" -maxdepth 2 2>/dev/null || echo "PRO 문제 폴더 없음"
+        echo ""
+        echo "📝 Python 파일들:"
+        find . -name "*.py" -maxdepth 3 2>/dev/null || echo "Python 파일 없음"
+        
+    - name: 📊 주간 진행상황 체크
+      run: |
+        echo "🚀 주간 알고리즘 스터디 체크 시작!"
+        python scripts/weekly_check.py
+        
+    - name: 📈 주간 진행률 업데이트
+      run: |
+        echo "📅 주간 진행률 업데이트 시작!"
+        python scripts/update_weekly_progress.py
+        
+    - name: 🔍 실행 후 상세 확인
+      run: |
+        echo "🔍 실행 후 상태 확인"
+        git status
+        echo ""
+        echo "📊 생성된 로그:"
+        ls -la logs/ 2>/dev/null || echo "로그 폴더 없음"
+        echo ""
+        echo "📋 로그 내용 미리보기:"
+        WEEK=$(date +%Y_W%V)
+        if [ -f "logs/weekly_log_${WEEK}.json" ]; then
+          echo "=== 이번 주 로그 ==="
+          head -20 "logs/weekly_log_${WEEK}.json"
+        fi
+        echo ""
+        if [ -f "logs/weekly_progress_${WEEK}.json" ]; then
+          echo "=== 이번 주 진행률 로그 ==="
+          head -30 "logs/weekly_progress_${WEEK}.json"
+        fi
+        echo ""
+        echo "📄 README 파일 확인:"
+        CURRENT_WEEK_FOLDER=$(ls -d *주차 2>/dev/null | tail -1)
+        if [ -f "${CURRENT_WEEK_FOLDER}/README.md" ]; then
+          echo "=== README 진행 현황 섹션 미리보기 ==="
+          grep -A 30 "## 📊 진행 현황" "${CURRENT_WEEK_FOLDER}/README.md" || echo "진행 현황 섹션 없음"
+        fi
+        
+    - name: 💾 스마트 커밋 및 푸시 (개선된 충돌 방지)
+      env:
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      run: |
+        if [[ -n $(git status --porcelain) ]]; then
+          echo "📝 변경사항 발견 - 스마트 커밋 진행"
+          
+          echo "📋 변경된 파일들:"
+          git status --porcelain
+          
+          git add .
+          
+          echo "🔄 푸시 전 원격 상태 재확인..."
+          git fetch origin master
+          
+          if ! git diff --quiet HEAD origin/master; then
+            echo "⚠️ 원격에 새로운 변경사항 발견 - 스마트 병합 시도"
+            
+            git commit -m "임시 커밋: $(date +'%Y-%m-%d %H:%M')"
+            
+            git pull origin master --strategy=ours --no-edit || {
+              echo "❌ 스마트 병합 실패 - 수동 병합 시도"
+              
+              git merge origin/master --strategy-option=ours --no-edit || {
+                echo "⚠️ 병합 충돌 발생 - 자동 해결 시도"
+                
+                CURRENT_WEEK_FOLDER=$(ls -d *주차 2>/dev/null | tail -1)
+                if [ -f "${CURRENT_WEEK_FOLDER}/README.md" ]; then
+                  git checkout --ours "${CURRENT_WEEK_FOLDER}/README.md"
+                  git add "${CURRENT_WEEK_FOLDER}/README.md"
+                  echo "✅ README.md 충돌 해결 (우리 버전 사용)"
+                fi
+                
+                if [ -d "logs" ]; then
+                  git add logs/
+                  echo "✅ logs 폴더 충돌 해결 (우리 버전 사용)"
+                fi
+                
+                git commit --no-edit
+              }
+            }
+            
+            git commit --amend -m "📅 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 주간 진행률"
+          else
+            git commit -m "📅 자동 업데이트: $(date +'%Y-%m-%d %H:%M') - 주간 진행률"
+          fi
+          
+          MAX_RETRIES=5
+          RETRY_COUNT=0
+          
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            echo "🚀 푸시 시도 ($((RETRY_COUNT + 1))/$MAX_RETRIES)..."
+            
+            if git push origin master; then
+              echo "✅ 푸시 성공!"
+              break
+            else
+              echo "❌ 푸시 실패 - 재시도 준비 중..."
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+              
+              if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+                echo "🔄 최신 변경사항 다시 가져오기..."
+                
+                git fetch origin master
+                
+                git rebase origin/master || {
+                  echo "⚠️ 리베이스 실패 - 병합으로 재시도"
+                  git rebase --abort
+                  git merge origin/master --strategy-option=ours --no-edit
+                }
+                
+                echo "⏳ $((3 * RETRY_COUNT))초 대기 후 재시도..."
+                sleep $((3 * RETRY_COUNT))
+              else
+                echo "❌ 최대 재시도 횟수 초과"
+                echo "📋 최종 상태:"
+                git status
+                git log --oneline -5
+                exit 1
+              fi
+            fi
+          done
+        else
+          echo "ℹ️ 변경사항 없음 - 커밋할 내용이 없습니다"
+        fi
+
+    - name: 📊 결과 요약
+      run: |
+        echo "🎉 GitHub Actions 실행 완료!"
+        echo "🏢 Organization: about-algorithm-study"
+        echo "📈 스터디 멤버: 김강연, 신재혁, 오창민, 송민경, 최재각"
+        echo "📁 파일 구조: 주차폴더/문제폴더/파일명.py"
+        echo "🤖 자동화: 주간 체크 + 주간 진행률 업데이트 + 스마트 충돌 해결"
+        echo "📅 주간 진행률: 1주일에 9문제 진행 상황 추적"
+        echo "🔗 결과 확인: https://github.com/about-algorithm-study/About_Algorithm_Study"
+        echo ""
+        echo "📋 최종 Git 상태:"
+        git status
+        echo ""
+        echo "📜 최근 커밋:"
+        git log --oneline -3

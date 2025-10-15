@@ -1,0 +1,45 @@
+name: Update Progress
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**/*.py'
+      - '**/*.java'
+      - '**/*.cpp'
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Run progress update script
+      run: python scripts/update_progress.py
+
+    - name: Check for changes
+      id: check_changes
+      run: |
+        git diff --quiet README.md || echo "changed=true" >> $GITHUB_OUTPUT
+        git diff --quiet */README.md || echo "changed=true" >> $GITHUB_OUTPUT
+
+    - name: Commit and push if changed
+      if: steps.check_changes.outputs.changed == 'true'
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add README.md */README.md
+        git commit -m "docs: 자동 진행률 업데이트 [skip ci]"
+        git push

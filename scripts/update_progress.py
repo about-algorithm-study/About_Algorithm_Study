@@ -1,426 +1,232 @@
-# scripts/update_progress.py - 중복 추가 및 진행률 계산 오류 수정 버전
+#!/usr/bin/env python3
+"""
+알고리즘 스터디 진행률 자동 업데이트 스크립트
+각 주차별 폴더를 스캔하여 멤버별 문제 풀이 수를 카운트하고 README를 업데이트합니다.
+"""
+
 import os
 import re
-import json
-from datetime import datetime, date
+from pathlib import Path
+from datetime import datetime
 from collections import defaultdict
 
-# 스터디 멤버 리스트 (실제 이름으로 업데이트)
-MEMBERS = ["kky", "sjh", "ocm", "smk", "최재각"]
+# 멤버 정보 (이니셜: 이름)
+MEMBERS = {
+    'kky': '김강연',
+    'sjh': '신재혁',
+    'ocm': '오창민',
+    'smk': '송민경',
+    'cjg': '최재각'
+}
 
+# 멤버 순서 (표에 표시할 순서)
+MEMBER_ORDER = ['김강연', '신재혁', '오창민', '송민경', '최재각']
 
-def find_all_week_folders():
-    """모든 주차 폴더 찾기"""
+def get_week_folders():
+    """주차별 폴더 목록을 반환합니다."""
+    root = Path('.')
+    week_pattern = re.compile(r'^\d+월\d+주차$')
+
     week_folders = []
+    for folder in root.iterdir():
+        if folder.is_dir() and week_pattern.match(folder.name):
+            week_folders.append(folder)
 
-    try:
-        items = os.listdir(".")
-        print(f"📂 루트 디렉토리 내용: {items}")
+    return sorted(week_folders, key=lambda x: x.name)
 
-        for item in items:
-            if os.path.isdir(item):
-                # 월 + 주차 패턴 확인 (예: 8월3주차, 8월4주차)
-                if re.match(r"\d+월\d+주차", item):
-                    week_folders.append(item)
-                    print(f"  ✅ 주차 폴더 발견: {item}")
-    except Exception as e:
-        print(f"❌ 폴더 검색 오류: {e}")
+def count_solutions(week_folder):
+    """특정 주차 폴더의 멤버별 풀이 수를 카운트합니다."""
+    member_counts = defaultdict(int)
 
-    return sorted(week_folders)
+    # 문제 폴더들을 순회
+    for problem_folder in week_folder.iterdir():
+        if not problem_folder.is_dir():
+            continue
 
+        # 각 파일 확인
+        for file_path in problem_folder.iterdir():
+            if not file_path.is_file():
+                continue
 
-def get_target_week_folder():
-    """대상 주차 폴더 결정"""
-    week_folders = find_all_week_folders()
+            # 파일명 패턴: 플랫폼_문제번호_이니셜.확장자
+            # 예: BOJ_10870_kky.py, SWEA_1234_sjh.java
+            pattern = r'_([a-z]{2,3})\.(py|java|cpp|js)$'
+            match = re.search(pattern, file_path.name)
 
-    if not week_folders:
-        print("❌ 주차 폴더를 찾을 수 없습니다.")
-        return None
+            if match:
+                initial = match.group(1)
+                if initial in MEMBERS:
+                    member_counts[MEMBERS[initial]] += 1
 
-    # 가장 최근 폴더 사용
-    target_folder = week_folders[-1]
-    print(f"🎯 대상 폴더: {target_folder}")
-    return target_folder
+    return member_counts
 
+def generate_progress_bar(count, total):
+    """진행률 바를 생성합니다."""
+    filled = int((count / total) * 9)
+    bar = '🟩' * filled + '⬜' * (9 - filled)
+    return bar
 
-def ensure_readme_exists(week_folder):
-    """README.md 파일 존재 확인"""
-    if not week_folder:
-        return None
+def update_week_readme(week_folder, member_counts, total_problems=9):
+    """주차별 README.md를 업데이트합니다."""
+    readme_path = week_folder / 'README.md'
 
-    readme_path = os.path.join(week_folder, "README.md")
+    if not readme_path.exists():
+        print(f"⚠️  {week_folder.name}/README.md 파일이 없습니다. 건너뜁니다.")
+        return
 
-    print(f"🔍 README 파일 경로 확인: {readme_path}")
-    print(f"🔍 파일 존재 여부: {os.path.exists(readme_path)}")
+    with open(readme_path, 'r', encoding='utf-8') as f:
+        content = f.read()
 
-    if os.path.exists(readme_path):
-        print(f"✅ README 파일 존재: {readme_path}")
-        return readme_path
+    # 진행 현황 테이블 생성
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M')
 
-    print(f"❌ README.md 파일을 찾을 수 없습니다: {readme_path}")
-    return None
+    table_lines = [
+        '## 📊 진행 현황\n',
+        '| 멤버 | 진행률 | 풀이 문제 수 | 비고 |',
+        '|------|--------|-------------|------|'
+    ]
 
+    for member_name in MEMBER_ORDER:
+        count = member_counts.get(member_name, 0)
+        percentage = (count / total_problems) * 100
+        progress_bar = generate_progress_bar(count, total_problems)
+        status = '✅' if count >= total_problems else '⏳'
 
-def get_total_problems_from_readme(readme_path):
-    """README에서 총 문제 수 파악"""
-    try:
-        with open(readme_path, "r", encoding="utf-8") as f:
-            content = f.read()
+        table_lines.append(
+            f'| {member_name} | {percentage:.1f}% {progress_bar} | {count}/{total_problems} | {status} |'
+        )
 
-        # 문제 목록 테이블에서 문제 수 계산
-        # | 번호 | 문제명 | 난이도 | 분류 | 링크 | 형태의 테이블에서 계산
-        pattern = r"\|\s*\d+\s*\|[^|]+\|[^|]+\|[^|]+\|[^|]+\|"
-        matches = re.findall(pattern, content)
+    table_lines.append(f'\n**마지막 업데이트**: {current_time}\n')
 
-        total_problems = len(matches)
-        print(f"📝 README에서 파악한 총 문제 수: {total_problems}개")
+    new_table = '\n'.join(table_lines)
 
-        if total_problems == 0:
-            # 백업 방법: BOJ_, PRO_ 등이 포함된 줄 수 세기
-            problem_lines = [
-                line for line in content.split("\n") if "BOJ" in line or "PRO" in line
-            ]
-            total_problems = len(
-                [line for line in problem_lines if "|" in line and "http" in line]
-            )
-            print(f"📝 백업 방법으로 파악한 문제 수: {total_problems}개")
+    # 기존 진행 현황 섹션 교체
+    pattern = r'## 📊 진행 현황\n.*?\*\*마지막 업데이트\*\*:.*?\n'
+    if re.search(pattern, content, re.DOTALL):
+        updated_content = re.sub(pattern, new_table, content, flags=re.DOTALL)
+    else:
+        # 진행 현황 섹션이 없으면 추가
+        updated_content = content + '\n\n' + new_table
 
-        return total_problems
+    with open(readme_path, 'w', encoding='utf-8') as f:
+        f.write(updated_content)
 
-    except Exception as e:
-        print(f"❌ README에서 문제 수 파악 실패: {e}")
-        return 0
+    print(f"✅ {week_folder.name}/README.md 업데이트 완료")
 
+def update_main_readme(all_weeks_data):
+    """메인 README.md를 업데이트합니다."""
+    readme_path = Path('README.md')
 
-def calculate_member_progress():
-    """각 멤버별 진행률 계산 - 수정된 버전"""
-    week_folder = get_target_week_folder()
+    if not readme_path.exists():
+        print("⚠️  README.md 파일이 없습니다.")
+        return
 
-    if not week_folder:
-        return {
-            member: {"solved": 0, "total": 0, "percentage": 0, "status": "📈"}
-            for member in MEMBERS
-        }
+    with open(readme_path, 'r', encoding='utf-8') as f:
+        content = f.read()
 
-    # README에서 총 문제 수 파악
-    readme_path = ensure_readme_exists(week_folder)
-    total_problems = get_total_problems_from_readme(readme_path) if readme_path else 0
+    # 전체 통계 계산
+    total_counts = defaultdict(int)
+    for week_name, member_counts in all_weeks_data.items():
+        for member, count in member_counts.items():
+            total_counts[member] += count
 
-    print(f"🎯 이번 주 총 문제 수: {total_problems}개")
+    total_weeks = len(all_weeks_data)
+    total_problems = total_weeks * 9
 
-    member_stats = defaultdict(lambda: {"solved": 0, "total": total_problems})
-
-    try:
-        # 주차 폴더 존재 확인
-        if not os.path.exists(week_folder):
-            print(f"❌ 주차 폴더가 존재하지 않습니다: {week_folder}")
-            return {
-                member: {
-                    "solved": 0,
-                    "total": total_problems,
-                    "percentage": 0,
-                    "status": "📈",
-                }
-                for member in MEMBERS
-            }
-
-        items = os.listdir(week_folder)
-        print(f"📅 {week_folder} 내용: {items}")
-
-        # 날짜 폴더들 확인 (4자리 숫자: 0820, 0821 등)
-        date_folders = [item for item in items if item.isdigit() and len(item) == 4]
-        print(f"📅 날짜 폴더들: {date_folders}")
-
-        # 각 멤버별 해결한 문제 집합 (중복 제거용)
-        member_solved_problems = defaultdict(set)
-
-        for date_folder in date_folders:
-            date_path = os.path.join(week_folder, date_folder)
-
-            if os.path.isdir(date_path):
-                print(f"📅 날짜 폴더 확인: {date_folder}")
-
-                # 해당 날짜의 문제별 폴더들 찾기
-                problem_folders = find_problem_folders(date_path)
-
-                print(f"   📁 문제 폴더들: {problem_folders}")
-
-                # 각 멤버별 해결 현황 계산
-                for member in MEMBERS:
-                    solved_problems = get_member_solved_problems(
-                        date_path, member, problem_folders
-                    )
-                    member_solved_problems[member].update(solved_problems)
-
-                    print(
-                        f"   👤 {member}: {len(solved_problems)}개 해결 ({solved_problems})"
-                    )
-
-        # 최종 통계 계산
-        for member in MEMBERS:
-            solved_count = len(member_solved_problems[member])
-            member_stats[member]["solved"] = solved_count
-            member_stats[member]["total"] = total_problems
-
-            print(f"🏆 {member} 최종: {solved_count}/{total_problems}개 해결")
-
-    except Exception as e:
-        print(f"❌ 진행률 계산 오류: {e}")
-        import traceback
-
-        traceback.print_exc()
-
-    # 진행률 계산 및 상태 결정
-    progress = {}
-    for member in MEMBERS:
-        solved = member_stats[member]["solved"]
-        total = member_stats[member]["total"]
-        percentage = round((solved / total) * 100, 1) if total > 0 else 0
-
-        # 상태 아이콘
-        if percentage >= 90:
-            status = "🔥"
-        elif percentage >= 70:
-            status = "⚡"
-        elif percentage >= 50:
-            status = "💪"
-        else:
-            status = "📈"
-
-        progress[member] = {
-            "solved": solved,
-            "total": total,
-            "percentage": percentage,
-            "status": status,
-        }
-
-    return progress
-
-
-def find_problem_folders(date_path):
-    """특정 날짜 경로에서 문제 폴더들 찾기"""
-    problem_folders = []
-
-    try:
-        if not os.path.exists(date_path):
-            return problem_folders
-
-        items = os.listdir(date_path)
-
-        for item in items:
-            item_path = os.path.join(date_path, item)
-            # 폴더이면서 문제 패턴 (BOJ_, PRO_ 등)에 맞는 것들
-            if os.path.isdir(item_path) and (
-                item.startswith("BOJ_")
-                or item.startswith("PRO_")
-                or item.startswith("SWEA_")
-            ):
-                problem_folders.append(item)
-
-    except Exception as e:
-        print(f"⚠️  문제 폴더 찾기 오류: {e}")
-
-    return sorted(problem_folders)
-
-
-def get_member_solved_problems(date_path, member, problem_folders):
-    """특정 멤버가 해결한 문제 목록 반환 (중복 제거용)"""
-    solved_problems = set()
-
-    try:
-        for problem_folder in problem_folders:
-            problem_path = os.path.join(date_path, problem_folder)
-
-            if os.path.isdir(problem_path):
-                # 문제 폴더 안의 파일들 확인
-                files = os.listdir(problem_path)
-
-                # 해당 멤버의 파일이 있는지 확인
-                member_files = [f for f in files if member in f and f.endswith(".py")]
-
-                if member_files:
-                    # 문제 번호 추출 (BOJ_2447 -> 2447)
-                    problem_num = (
-                        problem_folder.split("_")[1]
-                        if "_" in problem_folder
-                        else problem_folder
-                    )
-                    solved_problems.add(problem_num)
-                    print(
-                        f"     ✅ {member}: {problem_folder} 해결 ({member_files[0]})"
-                    )
-
-    except Exception as e:
-        print(f"⚠️  {member} 해결 문제 계산 오류: {e}")
-
-    return solved_problems
-
-
-def generate_progress_section(progress):
-    """진행률 섹션 생성"""
-    lines = []
-    lines.append("### 📊 참여자별 현황")
-    lines.append("| 이름 | 해결 문제 | 진행률 | 상태 |")
-    lines.append("|------|-----------|--------|------|")
-
-    for member, data in progress.items():
-        line = f"| {member} | {data['solved']}/{data['total']} | {data['percentage']}% | {data['status']} |"
-        lines.append(line)
-
-    # 전체 통계
-    total_solved = sum(data["solved"] for data in progress.values())
-    avg_percentage = (
-        round(sum(data["percentage"] for data in progress.values()) / len(progress), 1)
-        if progress
-        else 0
+    # 순위 정렬
+    sorted_members = sorted(
+        MEMBER_ORDER,
+        key=lambda m: total_counts.get(m, 0),
+        reverse=True
     )
 
-    lines.append("")
-    lines.append("### 📈 전체 통계")
-    lines.append(f"- **총 해결 문제**: {total_solved}개")
-    lines.append(f"- **평균 진행률**: {avg_percentage}%")
-    lines.append(f"- **업데이트 시간**: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M')
 
-    return "\n".join(lines)
+    # 전체 진행률 섹션 생성
+    overall_lines = [
+        '## 📈 전체 진행률 (누적)\n',
+        f'**업데이트**: {current_time}\n',
+        f'- 📅 총 {total_weeks}주차 진행',
+        f'- 📝 전체 문제: {total_problems}개\n',
+        '### 👥 멤버별 누적 통계\n',
+        '| 순위 | 멤버 | 총 풀이 | 주평균 | 참여율 | 진행바 |',
+        '|------|------|---------|--------|--------|--------|'
+    ]
 
+    medals = ['🥇', '🥈', '🥉']
+    for idx, member_name in enumerate(sorted_members):
+        count = total_counts.get(member_name, 0)
+        avg_per_week = count / total_weeks if total_weeks > 0 else 0
+        participation_rate = (count / total_problems * 100) if total_problems > 0 else 0
+        progress_bar = '⬜' * 10  # 간단한 10칸 바
+        rank = medals[idx] if idx < 3 else f'{idx + 1}위'
 
-def update_readme_with_progress(progress):
-    """README 파일 업데이트 - 중복 추가 방지 개선"""
-    week_folder = get_target_week_folder()
+        overall_lines.append(
+            f'| {rank} | {member_name} | {count}개 | {avg_per_week:.2f}개 | {participation_rate:.1f}% | {progress_bar} |'
+        )
 
-    if not week_folder:
-        print("❌ 대상 폴더를 찾을 수 없습니다.")
-        return False
+    overall_lines.append('\n### 📊 주차별 진행률\n')
 
-    readme_path = ensure_readme_exists(week_folder)
+    # 주차별 진행률 테이블
+    for week_name in sorted(all_weeks_data.keys()):
+        member_counts = all_weeks_data[week_name]
+        overall_lines.append(f'\n#### {week_name}\n')
+        overall_lines.append('| 멤버 | 풀이 수 | 진행률 |')
+        overall_lines.append('|------|---------|--------|')
 
-    if not readme_path:
-        print("❌ README 파일을 찾을 수 없습니다.")
-        return False
+        for member_name in MEMBER_ORDER:
+            count = member_counts.get(member_name, 0)
+            percentage = (count / 9) * 100
+            status = '✅' if count >= 9 else '⏳'
+            overall_lines.append(f'| {member_name} | {count}/9 | {percentage:.1f}% {status} |')
 
-    try:
-        print(f"📖 README 파일 읽기 시도: {readme_path}")
+    overall_lines.append('\n---\n')
 
-        # 기존 내용 읽기
-        with open(readme_path, "r", encoding="utf-8") as f:
-            content = f.read()
+    new_section = '\n'.join(overall_lines)
 
-        print(f"✅ README 파일 읽기 성공 (길이: {len(content)} 문자)")
+    # 기존 전체 진행률 섹션 교체
+    pattern = r'## 📈 전체 진행률 \(누적\)\n.*?---\n'
+    if re.search(pattern, content, re.DOTALL):
+        updated_content = re.sub(pattern, new_section, content, flags=re.DOTALL)
+    else:
+        # 섹션이 없으면 파일 끝에 추가
+        updated_content = content + '\n\n' + new_section
 
-        # 새로운 진행률 섹션
-        new_progress = generate_progress_section(progress)
-        print(f"📊 새로운 진행률 섹션 생성 완료")
+    with open(readme_path, 'w', encoding='utf-8') as f:
+        f.write(updated_content)
 
-        # 기존 진행 현황 섹션을 찾아서 완전히 교체
-        # 더 정확한 패턴 매칭
-        progress_start = content.find("## 📊 진행 현황")
+    print("✅ README.md 업데이트 완료")
 
-        if progress_start != -1:
-            # 다음 ## 섹션이나 파일 끝까지 찾기
-            next_section_start = content.find("\n## ", progress_start + 1)
+def main():
+    """메인 실행 함수"""
+    print("🚀 알고리즘 스터디 진행률 업데이트 시작...\n")
 
-            if next_section_start != -1:
-                # 다음 섹션이 있는 경우
-                before_progress = content[:progress_start]
-                after_progress = content[next_section_start:]
-                new_content = f"{before_progress}## 📊 진행 현황\n\n{new_progress}\n\n{after_progress}"
-            else:
-                # 마지막 섹션인 경우
-                before_progress = content[:progress_start]
-                new_content = f"{before_progress}## 📊 진행 현황\n\n{new_progress}\n"
+    week_folders = get_week_folders()
 
-            print("🔄 기존 진행 현황 섹션 교체 완료")
-        else:
-            # 진행 현황 섹션이 없는 경우 추가
-            # 파일 끝에 회고 섹션이 있다면 그 앞에 추가
-            retrospect_start = content.find("## 💬 이번 주 회고")
+    if not week_folders:
+        print("⚠️  주차 폴더를 찾을 수 없습니다.")
+        return
 
-            if retrospect_start != -1:
-                before_retrospect = content[:retrospect_start]
-                after_retrospect = content[retrospect_start:]
-                new_content = f"{before_retrospect}\n## 📊 진행 현황\n\n{new_progress}\n\n{after_retrospect}"
-            else:
-                # 회고 섹션도 없다면 파일 끝에 추가
-                new_content = f"{content}\n\n---\n\n## 📊 진행 현황\n\n{new_progress}\n"
+    all_weeks_data = {}
 
-            print("➕ 새로운 진행 현황 섹션 추가")
+    for week_folder in week_folders:
+        print(f"📂 {week_folder.name} 스캔 중...")
+        member_counts = count_solutions(week_folder)
+        all_weeks_data[week_folder.name] = member_counts
 
-        print(f"💾 README 파일 저장 시도: {readme_path}")
+        # 주차별 README 업데이트
+        update_week_readme(week_folder, member_counts)
 
-        # 파일 저장
-        with open(readme_path, "w", encoding="utf-8") as f:
-            f.write(new_content)
+        # 결과 출력
+        for member in MEMBER_ORDER:
+            count = member_counts.get(member, 0)
+            print(f"  - {member}: {count}문제")
+        print()
 
-        print(f"✅ README 업데이트 완료: {readme_path}")
-        return True
+    # 메인 README 업데이트
+    update_main_readme(all_weeks_data)
 
-    except Exception as e:
-        print(f"❌ README 업데이트 실패: {e}")
-        import traceback
+    print("\n✨ 모든 업데이트가 완료되었습니다!")
 
-        traceback.print_exc()
-        return False
-
-
-def save_progress_log(progress):
-    """진행률 로그 저장"""
-    log_dir = "logs"
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
-
-    today = datetime.now().strftime("%Y%m%d")
-    log_data = {
-        "date": today,
-        "week_folder": get_target_week_folder(),
-        "progress": progress,
-        "timestamp": datetime.now().isoformat(),
-        "file_structure_type": "problem_folder_based",
-    }
-
-    log_file = os.path.join(log_dir, f"progress_log_{today}.json")
-
-    try:
-        with open(log_file, "w", encoding="utf-8") as f:
-            json.dump(log_data, f, ensure_ascii=False, indent=2)
-        print(f"💾 로그 저장: {log_file}")
-    except Exception as e:
-        print(f"❌ 로그 저장 실패: {e}")
-
-
-if __name__ == "__main__":
-    print("📈 진행률 업데이트 시작! (수정된 버전)")
-
-    try:
-        # 현재 폴더 구조 확인
-        print("🔍 현재 작업 디렉토리:", os.getcwd())
-        print("🔍 현재 디렉토리 내용:", os.listdir("."))
-
-        week_folders = find_all_week_folders()
-        target_folder = get_target_week_folder()
-
-        print(f"🎯 발견된 주차 폴더들: {week_folders}")
-        print(f"🎯 대상 폴더: {target_folder}")
-
-        if target_folder:
-            progress = calculate_member_progress()
-
-            print("📊 계산된 진행률:")
-            for member, data in progress.items():
-                print(
-                    f"  {data['status']} {member}: {data['solved']}/{data['total']} ({data['percentage']}%)"
-                )
-
-            # README 업데이트
-            if update_readme_with_progress(progress):
-                save_progress_log(progress)
-                print("✅ 진행률 업데이트 완료!")
-            else:
-                print("❌ README 업데이트 실패")
-        else:
-            print("❌ 대상 폴더를 찾을 수 없습니다.")
-
-    except Exception as e:
-        print(f"❌ 오류 발생: {e}")
-        import traceback
-
-        traceback.print_exc()
+if __name__ == '__main__':
+    main()
