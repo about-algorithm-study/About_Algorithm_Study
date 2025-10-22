@@ -1,3 +1,4 @@
+
 T = int(input())
 delta = [(0, 1), (1, 0), (-1, 0), (0, -1)]
 
@@ -37,6 +38,10 @@ def line(index, cnt, hap):
         elif cnt == max_core and hap < min_hap:
             min_hap = hap
         return
+    
+    if cnt + (len(core_lst) - index) < max_core:
+        return  # 앞으로 다 연결해도 최대 갱신 불가능
+
 
     x, y = core_lst[index]
 
