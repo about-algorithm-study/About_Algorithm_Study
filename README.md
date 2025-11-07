@@ -7,11 +7,12 @@
 
 | 이름 | GitHub | 주 언어 |
 |------|---------|---------|
-| 김강연 | [@Kimkangyeon-17](https://github.com/Kimkangyeon-17) | Python |
+| 김강연 | [@Kimkangyeon-17](https://github.com/Kimkangyeon-17) | Python, Go |
 | 신재혁 | [@Jaehyeok-Seen](https://github.com/Jaehyeok-Seen) | Python |
 | 오창민 | [@mm-sj](https://github.com/mm-sj) | Python |
 | 송민경 | [@Ssongnya](https://github.com/Ssongnya) | Python |
 | 최재각 | [@rerak](https://github.com/rerak) | Python |
+| 이준협 | [@Lee-JunH](https://github.com/Lee-JunH) | Python, C |
 
 ## 📋 스터디 진행 방식
 - **매주**: 9문제 풀이 (주차별로 진행)
