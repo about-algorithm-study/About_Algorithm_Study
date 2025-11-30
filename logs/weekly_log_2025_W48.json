@@ -1,0 +1,40 @@
+{
+  "timestamp": "2025-11-30T15:09:53.416573",
+  "week": "9월2주차",
+  "week_number": "2025_W48",
+  "total_problems": 0,
+  "target_problems": 9,
+  "problems": [],
+  "members": {
+    "kky": {
+      "name": "김강연",
+      "solved": 0,
+      "problems": [],
+      "percentage": 0.0
+    },
+    "sjh": {
+      "name": "신재혁",
+      "solved": 0,
+      "problems": [],
+      "percentage": 0.0
+    },
+    "ocm": {
+      "name": "오창민",
+      "solved": 0,
+      "problems": [],
+      "percentage": 0.0
+    },
+    "smk": {
+      "name": "송민경",
+      "solved": 0,
+      "problems": [],
+      "percentage": 0.0
+    },
+    "cjg": {
+      "name": "최재각",
+      "solved": 0,
+      "problems": [],
+      "percentage": 0.0
+    }
+  }
+}
