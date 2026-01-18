@@ -1,0 +1,303 @@
+{
+  "timestamp": "2026-01-18T15:10:54.010282",
+  "week_number": "2026_W03",
+  "summary": {
+    "total_weeks": 7,
+    "total_problems": 63,
+    "weekly_target": 9
+  },
+  "weeks": [
+    {
+      "name": "10월1주차",
+      "total_problems": 6,
+      "members": {
+        "kky": {
+          "solved": 3,
+          "problems": [
+            "SWEA_2112",
+            "SWEA_1926",
+            "SWEA_1217"
+          ]
+        },
+        "sjh": {
+          "solved": 3,
+          "problems": [
+            "SWEA_2112",
+            "SWEA_1285",
+            "SWEA_1966"
+          ]
+        },
+        "ocm": {
+          "solved": 3,
+          "problems": [
+            "SWEA_1926",
+            "SWEA_1945",
+            "SWEA_1966"
+          ]
+        },
+        "smk": {
+          "solved": 0,
+          "problems": []
+        },
+        "cjg": {
+          "solved": 3,
+          "problems": [
+            "SWEA_1926",
+            "SWEA_1945",
+            "SWEA_1966"
+          ]
+        }
+      }
+    },
+    {
+      "name": "10월2주차",
+      "total_problems": 6,
+      "members": {
+        "kky": {
+          "solved": 0,
+          "problems": []
+        },
+        "sjh": {
+          "solved": 4,
+          "problems": [
+            "SWEA_1859",
+            "SWEA_2117",
+            "SWEA_1928",
+            "SWEA_2805"
+          ]
+        },
+        "ocm": {
+          "solved": 4,
+          "problems": [
+            "SWEA_1859",
+            "SWEA_1948",
+            "SWEA_1928",
+            "SWEA_2805"
+          ]
+        },
+        "smk": {
+          "solved": 6,
+          "problems": [
+            "SWEA_1859",
+            "SWEA_1767",
+            "SWEA_1948",
+            "SWEA_2117",
+            "SWEA_1928",
+            "SWEA_2805"
+          ]
+        },
+        "cjg": {
+          "solved": 0,
+          "problems": []
+        }
+      }
+    },
+    {
+      "name": "8월3주차",
+      "total_problems": 0,
+      "members": {
+        "kky": {
+          "solved": 0,
+          "problems": []
+        },
+        "sjh": {
+          "solved": 0,
+          "problems": []
+        },
+        "ocm": {
+          "solved": 0,
+          "problems": []
+        },
+        "smk": {
+          "solved": 0,
+          "problems": []
+        },
+        "cjg": {
+          "solved": 0,
+          "problems": []
+        }
+      }
+    },
+    {
+      "name": "8월4주차",
+      "total_problems": 0,
+      "members": {
+        "kky": {
+          "solved": 0,
+          "problems": []
+        },
+        "sjh": {
+          "solved": 0,
+          "problems": []
+        },
+        "ocm": {
+          "solved": 0,
+          "problems": []
+        },
+        "smk": {
+          "solved": 0,
+          "problems": []
+        },
+        "cjg": {
+          "solved": 0,
+          "problems": []
+        }
+      }
+    },
+    {
+      "name": "9월1주차",
+      "total_problems": 0,
+      "members": {
+        "kky": {
+          "solved": 0,
+          "problems": []
+        },
+        "sjh": {
+          "solved": 0,
+          "problems": []
+        },
+        "ocm": {
+          "solved": 0,
+          "problems": []
+        },
+        "smk": {
+          "solved": 0,
+          "problems": []
+        },
+        "cjg": {
+          "solved": 0,
+          "problems": []
+        }
+      }
+    },
+    {
+      "name": "9월2주차",
+      "total_problems": 0,
+      "members": {
+        "kky": {
+          "solved": 0,
+          "problems": []
+        },
+        "sjh": {
+          "solved": 0,
+          "problems": []
+        },
+        "ocm": {
+          "solved": 0,
+          "problems": []
+        },
+        "smk": {
+          "solved": 0,
+          "problems": []
+        },
+        "cjg": {
+          "solved": 0,
+          "problems": []
+        }
+      }
+    },
+    {
+      "name": "9월3주차",
+      "total_problems": 0,
+      "members": {
+        "kky": {
+          "solved": 0,
+          "problems": []
+        },
+        "sjh": {
+          "solved": 0,
+          "problems": []
+        },
+        "ocm": {
+          "solved": 0,
+          "problems": []
+        },
+        "smk": {
+          "solved": 0,
+          "problems": []
+        },
+        "cjg": {
+          "solved": 0,
+          "problems": []
+        }
+      }
+    }
+  ],
+  "cumulative_stats": {
+    "kky": {
+      "name": "김강연",
+      "total_solved": 3,
+      "by_week": {
+        "10월1주차": 3,
+        "10월2주차": 0,
+        "8월3주차": 0,
+        "8월4주차": 0,
+        "9월1주차": 0,
+        "9월2주차": 0,
+        "9월3주차": 0
+      },
+      "participation_rate": 4.8,
+      "average_per_week": 0.43
+    },
+    "sjh": {
+      "name": "신재혁",
+      "total_solved": 7,
+      "by_week": {
+        "10월1주차": 3,
+        "10월2주차": 4,
+        "8월3주차": 0,
+        "8월4주차": 0,
+        "9월1주차": 0,
+        "9월2주차": 0,
+        "9월3주차": 0
+      },
+      "participation_rate": 11.1,
+      "average_per_week": 1.0
+    },
+    "ocm": {
+      "name": "오창민",
+      "total_solved": 7,
+      "by_week": {
+        "10월1주차": 3,
+        "10월2주차": 4,
+        "8월3주차": 0,
+        "8월4주차": 0,
+        "9월1주차": 0,
+        "9월2주차": 0,
+        "9월3주차": 0
+      },
+      "participation_rate": 11.1,
+      "average_per_week": 1.0
+    },
+    "smk": {
+      "name": "송민경",
+      "total_solved": 6,
+      "by_week": {
+        "10월1주차": 0,
+        "10월2주차": 6,
+        "8월3주차": 0,
+        "8월4주차": 0,
+        "9월1주차": 0,
+        "9월2주차": 0,
+        "9월3주차": 0
+      },
+      "participation_rate": 9.5,
+      "average_per_week": 0.86
+    },
+    "cjg": {
+      "name": "최재각",
+      "total_solved": 3,
+      "by_week": {
+        "10월1주차": 3,
+        "10월2주차": 0,
+        "8월3주차": 0,
+        "8월4주차": 0,
+        "9월1주차": 0,
+        "9월2주차": 0,
+        "9월3주차": 0
+      },
+      "participation_rate": 4.8,
+      "average_per_week": 0.43
+    }
+  }
+}
